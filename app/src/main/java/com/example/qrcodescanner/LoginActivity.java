@@ -18,49 +18,43 @@ import android.widget.Toast;
 
 
 import com.example.qrcodescanner.ui.home.HomeFragment;
+import com.ibm.cloud.appid.android.api.AppID;
+import com.ibm.cloud.appid.android.api.AppIDAuthorizationManager;
+import com.ibm.cloud.appid.android.api.AuthorizationException;
+import com.ibm.cloud.appid.android.api.AuthorizationListener;
+import com.ibm.cloud.appid.android.api.LoginWidget;
+import com.ibm.cloud.appid.android.api.tokens.AccessToken;
+import com.ibm.cloud.appid.android.api.tokens.IdentityToken;
+import com.ibm.cloud.appid.android.api.tokens.RefreshToken;
+import com.ibm.mobilefirstplatform.clientsdk.android.core.api.BMSClient;
 
 public class LoginActivity extends AppCompatActivity {
     private static final int REQUEST_CODE = 1;
-    DatabaseHelper databaseHelper;
+    private AppID appId;
+    private BMSClient bmsClient;
+    private AppIDAuthorizationManager appIDAuthorizationManager;
     Button btnLogin;
-    EditText edtUsername;
-    EditText edtPassword;
-    ProgressDialog progressDialog;
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
+
+        bmsClient = BMSClient.getInstance();
+        appId = AppID.getInstance();
+        appId.initialize(this,"d1e16955-f793-498f-a8b6-7a8193219904",AppID.REGION_UK);
+
+        this.appIDAuthorizationManager = new AppIDAuthorizationManager(this.appId);
+        bmsClient.setAuthorizationManager(appIDAuthorizationManager);
         btnLogin=(Button) findViewById(R.id.ButtonLogin);
-        edtUsername=(EditText) findViewById(R.id.EditTextUsername);
-        edtPassword=(EditText) findViewById(R.id.EditTextPassword);
-        databaseHelper = new DatabaseHelper(LoginActivity.this);
-        databaseHelper.getAll();
-        progressDialog= new ProgressDialog(this);
 
         btnLogin.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                progressDialog.setMessage("Logging In");
-                progressDialog.show();
-
-                boolean isExist = databaseHelper.checkUserExist(edtUsername.getText().toString().trim(), edtPassword.getText().toString().trim());
-
-                if(isExist){
-                    Intent intent = new Intent(LoginActivity.this, NavBar.class);     //Admin activity to be coded
-                    startActivity(intent);
-                    progressDialog.dismiss();
-                } else {
-                    edtPassword.setText(null);
-                    edtUsername.setText(null);
-                    progressDialog.dismiss();
-                    Toast.makeText(LoginActivity.this, "Login failed. Invalid username or password.", Toast.LENGTH_SHORT).show();
-                }
+                Intent intent = new Intent(LoginActivity.this, LoginAction.class);
+                startActivity(intent);
             }
         });
 
-
     }
-
 }

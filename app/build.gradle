@@ -9,6 +9,7 @@ android {
         versionCode 1
         versionName "1.0"
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
+        manifestPlaceholders = ['appIdRedirectScheme': android.defaultConfig.applicationId]
     }
     buildTypes {
         release {
@@ -34,5 +35,6 @@ dependencies {
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.1.0'
     implementation 'com.github.blikoon:QRCodeScanner:0.1.2'
     implementation 'com.ajts.androidmads.SQLite2Excel:library:1.0.4'
+    implementation 'com.github.ibm-cloud-security:appid-clientsdk-android:6.+'
 
 }
