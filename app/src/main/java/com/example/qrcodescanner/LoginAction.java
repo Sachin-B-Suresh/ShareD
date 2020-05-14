@@ -40,6 +40,7 @@ public class LoginAction extends AppCompatActivity {
             @Override
             public void onAuthorizationCanceled() {
                 Log.d(" Auth","Cancelled");
+
             }
 
             @Override
@@ -50,23 +51,22 @@ public class LoginAction extends AppCompatActivity {
             @Override
             public void onAuthorizationSuccess(AccessToken accessToken, IdentityToken identityToken, RefreshToken refreshToken) {
                 databaseHelper.deleteInstance();
+                String refresh_token;
+                refresh_token = null;
 // nullpointer exception (identityToken.getEmail() is null)
-                if(identityToken.getEmail()!=null){
+                try{
+                    refresh_token = identityToken.getPicture();
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
                     long returnValue = databaseHelper.insertRecord(identityToken.getEmail(),
                             refreshToken.getRaw(),
                             identityToken.getName(),
-                            identityToken.getPicture());
-                }
-                else {
-                    long returnValue = databaseHelper.insertRecord(identityToken.getEmail(),
-                            refreshToken.getRaw(),
-                            identityToken.getName(),
-                            null);
-                }
-                Log.d("pic",identityToken.getPicture());
+                            refresh_token);
                 Log.d("Name",identityToken.getName());
                 Intent intent = new Intent(LoginAction.this, NavBar.class);
                 startActivity(intent);
+                finish();
             }
         });
     }
