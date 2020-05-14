@@ -6,50 +6,54 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".SigninSignupActivity"
-    android:padding="32dp"
+    android:padding="16dp"
     android:gravity="center"
     android:background="@color/blue20">
 
 
         <ImageView
-            android:layout_width="match_parent"
-            android:layout_height="250dp"
+            android:layout_width="wrap_content"
+            android:layout_height="320dp"
             android:src="@drawable/login"/>
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="32dp"
             android:fontFamily="serif-monospace"
             android:text="@string/ShareD"
             android:textColor="@color/gray100"
             android:textSize="48sp"
             android:textStyle="bold" />
 
-
-<LinearLayout
-    android:layout_width="match_parent"
-    android:layout_height="wrap_content">
         <Button
-
             android:id="@+id/ButtonSignin"
-            android:layout_width="130dp"
+            android:layout_width="180dp"
             android:layout_height="wrap_content"
-            android:text="@string/Login"
-            android:textColor="#fff"
+            android:layout_marginTop="24dp"
             android:background="@drawable/buttonstyle"
-            android:layout_margin="24dp"
-            android:backgroundTint="@color/bule40"/>
-        <Button
+            android:backgroundTint="@color/bule40"
+            android:text="@string/SignIn"
+            android:textAllCaps="false"
+            android:textColor="#fff" />
 
-            android:id="@+id/ButtonSignup"
-            android:layout_width="130dp"
+        <TextView
+            android:id="@+id/TextForgotPassword"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@string/Signup"
-            android:textColor="#fff"
-            android:background="@drawable/buttonstyle"
+            android:text="@string/ForgotPassword"
+            android:textColor="@color/gray100"
+            android:textSize="12dp"
+            android:layout_marginTop="4dp"/>
+
+        <Button
+            android:id="@+id/ButtonSignup"
+            android:layout_width="180dp"
+            android:layout_height="wrap_content"
             android:layout_margin="24dp"
-            android:backgroundTint="@color/bule40"/>
-</LinearLayout>
+            android:background="@drawable/buttonstyle"
+            android:backgroundTint="@color/bule40"
+            android:text="@string/SignUp"
+            android:textAllCaps="false"
+            android:textColor="#fff" />
 
 </LinearLayout>

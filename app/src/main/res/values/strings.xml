@@ -3,12 +3,10 @@
     <string name="ShareD">ShareD</string>
     <string name="Username">Username</string>
     <string name="Password">Password</string>
-    <string name="Login">Login</string>
-    <string name="Signup">Signup</string>
+    <string name="SignIn">Sign In</string>
+    <string name="SignUp">Sign Up</string>
     <string name="SplashScreenActivity">Splash Screen Activity</string>
-    <string name="AboutUs">About Us</string>
-    <string name="ScanTicket">Scan Ticket</string>
-    <string name="AdminLoginHere">Admin? Login Here</string>
+    <string name="ForgotPassword">Forgot Password? Click Here</string>
     <string name="choose_file">Choose a CSV file to upload from...</string>
     <string name="choose">Choose</string>
     <string name="importBtn">Import</string>

@@ -14,6 +14,7 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
+import android.widget.TextView;
 import android.widget.Toast;
 
 
@@ -32,12 +33,14 @@ import com.ibm.cloud.appid.android.api.tokens.IdentityToken;
 import com.ibm.cloud.appid.android.api.tokens.RefreshToken;
 import com.ibm.mobilefirstplatform.clientsdk.android.core.api.BMSClient;
 
+
 public class SigninSignupActivity extends AppCompatActivity {
     private static final int REQUEST_CODE = 1;
     private AppID appId;
     private BMSClient bmsClient;
     private AppIDAuthorizationManager appIDAuthorizationManager;
     Button btnSignIn,btnSignUp;
+    TextView txtForgotPassword;
     private FusedLocationProviderClient fusedLocationProviderClient;
     private DatabaseHelper databaseHelper;
 
@@ -59,6 +62,7 @@ public class SigninSignupActivity extends AppCompatActivity {
         bmsClient.setAuthorizationManager(appIDAuthorizationManager);
         btnSignIn=(Button) findViewById(R.id.ButtonSignin);
         btnSignUp=(Button) findViewById(R.id.ButtonSignup);
+        txtForgotPassword=(TextView) findViewById(R.id.TextForgotPassword);
 
         btnSignIn.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -70,6 +74,12 @@ public class SigninSignupActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 signUpAction();
+            }
+        });
+        txtForgotPassword.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                forgotPasswordAction();
             }
         });
 
@@ -137,7 +147,7 @@ public class SigninSignupActivity extends AppCompatActivity {
                 databaseHelper.deleteInstance();
                 String refresh_token;
                 refresh_token = null;
-// nullpointer exception (identityToken.getEmail() is null)
+// nullpointer exception (identityToken.getPicture is null)
                 try{
                     refresh_token = identityToken.getPicture();
                 } catch (Exception e) {
@@ -188,6 +198,30 @@ public class SigninSignupActivity extends AppCompatActivity {
                 } else {
                     Toast.makeText(SigninSignupActivity.this, "Email Verification Required", Toast.LENGTH_SHORT).show();
                 }
+            }
+        });
+    }
+    public void forgotPasswordAction(){
+        appId.initialize(this, "d1e16955-f793-498f-a8b6-7a8193219904", AppID.REGION_UK);
+        this.appIDAuthorizationManager = new AppIDAuthorizationManager(this.appId);
+        LoginWidget loginWidget = AppID.getInstance().getLoginWidget();
+        loginWidget.launchForgotPassword(this, new AuthorizationListener() {
+            @Override
+            public void onAuthorizationFailure (AuthorizationException exception) {
+                //Exception occurred
+                Log.d(" Forgot Password ","Exception Occurred");
+            }
+
+            @Override
+            public void onAuthorizationCanceled () {
+                // Forogt password canceled by the user
+                Log.d(" Forgot Password ","Cancelled");
+            }
+
+            @Override
+            public void onAuthorizationSuccess (AccessToken accessToken, IdentityToken identityToken, RefreshToken refreshToken) {
+                // Forgot password finished, in this case accessToken and identityToken will be null.
+                Log.d(" Forgot Password ","Successful");
             }
         });
     }
