@@ -1,33 +1,48 @@
 package com.example.qrcodescanner.ui.home;
 
 
+import android.Manifest;
+import android.content.pm.PackageManager;
 import android.location.Location;
 import android.os.Bundle;
 
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.core.app.ActivityCompat;
 import androidx.fragment.app.Fragment;
+import androidx.lifecycle.Observer;
+import androidx.lifecycle.ViewModelProviders;
 
 
+import com.example.qrcodescanner.LoginActivity;
+import com.example.qrcodescanner.MainActivity;
+import com.example.qrcodescanner.NavBar;
 import com.example.qrcodescanner.R;
+import com.example.qrcodescanner.ui.gallery.GalleryViewModel;
+import com.google.android.gms.location.FusedLocationProviderClient;
+import com.google.android.gms.location.LocationServices;
+import com.google.android.gms.maps.CameraUpdate;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
+import com.google.android.gms.maps.model.CameraPosition;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
 
 public class HomeFragment extends Fragment {
-
-
+    private FusedLocationProviderClient fusedLocationProviderClient;
 
 
     private OnMapReadyCallback callback = new OnMapReadyCallback() {
-
         /**
          * Manipulates the map once available.
          * This callback is triggered when the map is ready to be used.
@@ -39,12 +54,19 @@ public class HomeFragment extends Fragment {
          */
         @Override
         public void onMapReady(GoogleMap googleMap) {
-            LatLng sydney = new LatLng(-34, 151);
-            googleMap.addMarker(new MarkerOptions().position(sydney).title("Marker in Sydney"));
-            googleMap.moveCamera(CameraUpdateFactory.newLatLng(sydney));
+
+            googleMap.setMyLocationEnabled(true);
+            googleMap.addMarker(new MarkerOptions().position(new LatLng(15.8697807 , 74.4867473)));
+            googleMap.addMarker(new MarkerOptions().position(new LatLng(15.872526, 74.488292)));
+            googleMap.addMarker(new MarkerOptions().position(new LatLng(15.868134, 74.492630)));
+            googleMap.addMarker(new MarkerOptions().position(new LatLng(15.869552, 74.492948)));
+            googleMap.addMarker(new MarkerOptions().position(new LatLng(15.877306, 74.491030)));
+            CameraUpdate update = CameraUpdateFactory.newLatLngZoom(new LatLng(15.8697807 , 74.4867473),
+                    14);
+            googleMap.moveCamera(update);
+
         }
     };
-
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater,
@@ -52,14 +74,15 @@ public class HomeFragment extends Fragment {
                              @Nullable Bundle savedInstanceState) {
         return inflater.inflate(R.layout.fragment_maps, container, false);
     }
-
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        SupportMapFragment mapFragment =
-                (SupportMapFragment) getChildFragmentManager().findFragmentById(R.id.map);
+        SupportMapFragment mapFragment = (SupportMapFragment) getChildFragmentManager().findFragmentById(R.id.map);
         if (mapFragment != null) {
+            GoogleMap googleMap;
             mapFragment.getMapAsync(callback);
         }
     }
+
 }
+

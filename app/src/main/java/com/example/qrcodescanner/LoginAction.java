@@ -4,6 +4,7 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 
 import com.ibm.cloud.appid.android.api.AppID;
 import com.ibm.cloud.appid.android.api.AppIDAuthorizationManager;
@@ -20,11 +21,13 @@ public class LoginAction extends AppCompatActivity {
     private AppID appId;
     private BMSClient bmsClient;
     private AppIDAuthorizationManager appIDAuthorizationManager;
+    private DatabaseHelper databaseHelper;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login_action);
+        databaseHelper = new DatabaseHelper(this);
 
         bmsClient = BMSClient.getInstance();
         appId = AppID.getInstance();
@@ -36,16 +39,22 @@ public class LoginAction extends AppCompatActivity {
         loginWidget.launch(this, new AuthorizationListener() {
             @Override
             public void onAuthorizationCanceled() {
-
+                Log.d(" Auth","Cancelled");
             }
 
             @Override
             public void onAuthorizationFailure(AuthorizationException exception) {
-
+                Log.d(" Auth","Failed");
             }
 
             @Override
             public void onAuthorizationSuccess(AccessToken accessToken, IdentityToken identityToken, RefreshToken refreshToken) {
+                databaseHelper.deleteInstance();
+// nullpointer exception (refreshToken is null)
+                long returnValue = databaseHelper.insertRecord(identityToken.getEmail(),"null",identityToken.getName());
+                Log.d("Email",identityToken.getEmail());
+                Log.d("Name",identityToken.getName());
+                Log.d("return value", String.valueOf(returnValue));
                 Intent intent = new Intent(LoginAction.this, NavBar.class);
                 startActivity(intent);
             }

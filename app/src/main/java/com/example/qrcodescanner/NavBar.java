@@ -3,6 +3,8 @@ package com.example.qrcodescanner;
 import android.os.Bundle;
 import android.view.View;
 import android.view.Menu;
+import android.widget.TextView;
+
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.snackbar.Snackbar;
 import com.google.android.material.navigation.NavigationView;
@@ -45,6 +47,16 @@ public class NavBar extends AppCompatActivity {
         NavController navController = Navigation.findNavController(this, R.id.nav_host_fragment);
         NavigationUI.setupActionBarWithNavController(this, navController, mAppBarConfiguration);
         NavigationUI.setupWithNavController(navigationView, navController);
+
+        NavigationView mNavigationView = findViewById(R.id.nav_view);
+        View headerView = mNavigationView.getHeaderView(0);
+        // get user name and email textViews
+        TextView userName = headerView.findViewById(R.id.name);
+        TextView userEmail = headerView.findViewById(R.id.email);
+        DatabaseHelper databaseHelper = new DatabaseHelper(this);
+        String[] userDetails=databaseHelper.fetchRefreshToken();
+        userName.setText(userDetails[2]);
+        userEmail.setText(userDetails[0]);
     }
 
     @Override
