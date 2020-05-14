@@ -50,11 +50,21 @@ public class LoginAction extends AppCompatActivity {
             @Override
             public void onAuthorizationSuccess(AccessToken accessToken, IdentityToken identityToken, RefreshToken refreshToken) {
                 databaseHelper.deleteInstance();
-// nullpointer exception (refreshToken is null)
-                long returnValue = databaseHelper.insertRecord(identityToken.getEmail(),"null",identityToken.getName());
-                Log.d("Email",identityToken.getEmail());
+// nullpointer exception (identityToken.getEmail() is null)
+                if(identityToken.getEmail()!=null){
+                    long returnValue = databaseHelper.insertRecord(identityToken.getEmail(),
+                            refreshToken.getRaw(),
+                            identityToken.getName(),
+                            identityToken.getPicture());
+                }
+                else {
+                    long returnValue = databaseHelper.insertRecord(identityToken.getEmail(),
+                            refreshToken.getRaw(),
+                            identityToken.getName(),
+                            null);
+                }
+                Log.d("pic",identityToken.getPicture());
                 Log.d("Name",identityToken.getName());
-                Log.d("return value", String.valueOf(returnValue));
                 Intent intent = new Intent(LoginAction.this, NavBar.class);
                 startActivity(intent);
             }

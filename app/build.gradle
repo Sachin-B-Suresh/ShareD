@@ -36,5 +36,7 @@ dependencies {
     implementation 'com.github.blikoon:QRCodeScanner:0.1.2'
     implementation 'com.ajts.androidmads.SQLite2Excel:library:1.0.4'
     implementation 'com.github.ibm-cloud-security:appid-clientsdk-android:6.+'
+    implementation 'com.github.bumptech.glide:glide:4.11.0'
+    annotationProcessor 'com.github.bumptech.glide:compiler:4.11.0'
 
 }

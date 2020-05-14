@@ -1,13 +1,26 @@
 package com.example.qrcodescanner;
 
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.graphics.drawable.Drawable;
+import android.net.Uri;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.view.Menu;
+import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.request.RequestOptions;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.snackbar.Snackbar;
 import com.google.android.material.navigation.NavigationView;
+
+import java.io.IOException;
+import java.net.MalformedURLException;
+import java.net.URI;
+import java.net.URL;
 
 import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
@@ -26,14 +39,18 @@ public class NavBar extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_maps_view);
+        final DatabaseHelper databaseHelper = new DatabaseHelper(this);
+        String[] userDetails=databaseHelper.fetchLocalInstance();
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         FloatingActionButton fab = findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
+                Snackbar.make(view, "Signing Out", Snackbar.LENGTH_LONG)
                         .setAction("Action", null).show();
+                databaseHelper.deleteInstance();
+                finish();
             }
         });
         DrawerLayout drawer = findViewById(R.id.drawer_layout);
@@ -53,10 +70,13 @@ public class NavBar extends AppCompatActivity {
         // get user name and email textViews
         TextView userName = headerView.findViewById(R.id.name);
         TextView userEmail = headerView.findViewById(R.id.email);
-        DatabaseHelper databaseHelper = new DatabaseHelper(this);
-        String[] userDetails=databaseHelper.fetchRefreshToken();
+        //image needs to be downloaded first (make use of glide )
+        ImageView userImage = headerView.findViewById(R.id.imageView);
+
         userName.setText(userDetails[2]);
         userEmail.setText(userDetails[0]);
+        if(userDetails[3]!=null)
+            Glide.with(this).load(userDetails[3]).apply(RequestOptions.circleCropTransform()).into(userImage);
     }
 
     @Override

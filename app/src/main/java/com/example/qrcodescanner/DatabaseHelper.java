@@ -14,6 +14,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     public static String COL1="email";
     public static String COL2="refresh_token";
     public static String COL3="name";
+    public static String COL4="imageUri";
     public DatabaseHelper(Context context) {
         super(context, DB_NAME, null, 1);
         SQLiteDatabase db=this.getReadableDatabase();
@@ -21,7 +22,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
     @Override
     public void onCreate(SQLiteDatabase db) {
-        db.execSQL("create TABLE "+TABLE_NAME+"(email text primary key, refresh_token text, name text)");
+        db.execSQL("create TABLE "+TABLE_NAME+"(email text primary key, refresh_token text, name text, imageUri text)");
     }
 
     @Override
@@ -29,13 +30,14 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         db.execSQL("Drop table if exists "+TABLE_NAME);
         onCreate(db);
     }
-    public long insertRecord(String email, String refresh_token, String name)
+    public long insertRecord(String email, String refresh_token, String name, String imageUri)
     {
         SQLiteDatabase db = this.getWritableDatabase();
         ContentValues contentValues= new ContentValues();
         contentValues.put(COL1,email);
         contentValues.put(COL2,refresh_token);
         contentValues.put(COL3,name);
+        contentValues.put(COL4,imageUri);
         return db.insert(TABLE_NAME, null, contentValues);
     }
 
@@ -48,22 +50,23 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         close();
         Log.d("Database count is ",Integer.toString(count));
         if(count > 0){
-            return true;
-        } else {
             return false;
+        } else {
+            return true;
         }
     }
-    public String[] fetchRefreshToken(){
-        String[] columns = {"email, refresh_token, name"};
+    public String[] fetchLocalInstance(){
+        String[] columns = {"email, refresh_token, name, imageUri"};
         SQLiteDatabase db= this.getReadableDatabase();
         Cursor cursor = db.query(TABLE_NAME, columns, null, null, null, null, null);
         cursor.moveToLast();
         Log.d(LOGTAG,cursor.getColumnName(0));
-        String[] row = new String[3];
+        String[] row = new String[4];
         row[0]=cursor.getString(cursor.getColumnIndex("email"));
         row[1]=cursor.getString(cursor.getColumnIndex("refresh_token"));
         row[2]=cursor.getString(cursor.getColumnIndex("name"));
-        Log.d("table content",row[0]+row[1]+row[2]);
+        row[3]=cursor.getString(cursor.getColumnIndex("imageUri"));
+        Log.d("table content",row[0]+row[1]+row[2]+row[3]);
         if(cursor.getCount()>0)
         {
             while (cursor.moveToNext())
