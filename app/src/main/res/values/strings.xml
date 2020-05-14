@@ -4,6 +4,7 @@
     <string name="Username">Username</string>
     <string name="Password">Password</string>
     <string name="Login">Login</string>
+    <string name="Signup">Signup</string>
     <string name="SplashScreenActivity">Splash Screen Activity</string>
     <string name="AboutUs">About Us</string>
     <string name="ScanTicket">Scan Ticket</string>

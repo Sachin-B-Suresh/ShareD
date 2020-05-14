@@ -1,11 +1,7 @@
 package com.example.qrcodescanner;
 
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
-import android.graphics.drawable.Drawable;
-import android.net.Uri;
+import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 import android.view.Menu;
 import android.widget.ImageView;
@@ -16,11 +12,6 @@ import com.bumptech.glide.request.RequestOptions;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.snackbar.Snackbar;
 import com.google.android.material.navigation.NavigationView;
-
-import java.io.IOException;
-import java.net.MalformedURLException;
-import java.net.URI;
-import java.net.URL;
 
 import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
@@ -50,6 +41,8 @@ public class NavBar extends AppCompatActivity {
                 Snackbar.make(view, "Signing Out", Snackbar.LENGTH_LONG)
                         .setAction("Action", null).show();
                 databaseHelper.deleteInstance();
+                Intent intent = new Intent(NavBar.this, SigninSignupActivity.class);
+                startActivity(intent);
                 finish();
             }
         });

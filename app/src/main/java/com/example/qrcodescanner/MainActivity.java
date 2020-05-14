@@ -1,25 +1,19 @@
 package com.example.qrcodescanner;
 
 import android.Manifest;
-import android.app.Activity;
-import android.app.ProgressDialog;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import androidx.annotation.NonNull;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
-import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import android.os.Bundle;
 import android.os.Handler;
 import android.util.Log;
-import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.blikoon.qrcodescanner.QrCodeActivity;
 import com.ibm.cloud.appid.android.api.AppID;
 import com.ibm.cloud.appid.android.api.AppIDAuthorizationManager;
 import com.ibm.cloud.appid.android.api.AuthorizationException;
@@ -62,7 +56,7 @@ public class MainActivity extends AppCompatActivity {
                 verifyPermissions();
                 if(databaseHelper.isDatabaseTableEmpty()){
                     Toast.makeText(MainActivity.this, "No Local Instance, Please Login", Toast.LENGTH_SHORT).show();
-                    Intent intent = new Intent(MainActivity.this, LoginActivity.class);
+                    Intent intent = new Intent(MainActivity.this, SigninSignupActivity.class);
                     startActivity(intent);
                     finish();
                 }
@@ -73,14 +67,14 @@ public class MainActivity extends AppCompatActivity {
                     AppID.getInstance().signinWithRefreshToken(getApplicationContext(), refreshTokenString, new AuthorizationListener() {
                         @Override
                         public void onAuthorizationFailure(AuthorizationException exception) {
-                            Intent intent = new Intent(MainActivity.this, LoginActivity.class);
+                            Intent intent = new Intent(MainActivity.this, SigninSignupActivity.class);
                             startActivity(intent);
                             finish();
                         }
 
                         @Override
                         public void onAuthorizationCanceled() {
-                            Intent intent = new Intent(MainActivity.this, LoginActivity.class);
+                            Intent intent = new Intent(MainActivity.this, SigninSignupActivity.class);
                             startActivity(intent);
                             finish();
                         }
