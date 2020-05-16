@@ -3,15 +3,18 @@ package com.example.qrcodescanner.ui.home;
 
 import android.os.Bundle;
 
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
 
+import com.example.qrcodescanner.MainActivity;
 import com.example.qrcodescanner.R;
 import com.google.android.gms.location.FusedLocationProviderClient;
 import com.google.android.gms.maps.CameraUpdate;
@@ -21,10 +24,16 @@ import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 
 public class HomeFragment extends Fragment {
     private FusedLocationProviderClient fusedLocationProviderClient;
-
+    FirebaseDatabase database = FirebaseDatabase.getInstance();
+    DatabaseReference myRef = database.getReference("Users");
 
     private OnMapReadyCallback callback = new OnMapReadyCallback() {
         /**
@@ -37,17 +46,38 @@ public class HomeFragment extends Fragment {
          * user has installed Google Play services and returned to the app.
          */
         @Override
-        public void onMapReady(GoogleMap googleMap) {
+        public void onMapReady(final GoogleMap googleMap) {
+            myRef.addValueEventListener(new ValueEventListener() {
+                @Override
+                public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                    for(DataSnapshot snapshot : dataSnapshot.getChildren()){
+
+//                        Log.d("firebase data",snapshot.child("location/latitude").getValue().toString());
+                        Double latitude = (Double) snapshot.child("location/latitude").getValue();
+                        Double longitude = (Double) snapshot.child("location/longitude").getValue();
+                        String name = snapshot.child("name").getValue().toString();
+                        String email = snapshot.child("email").getValue().toString();
+
+                        googleMap.addMarker(new MarkerOptions()
+                                .position(new LatLng(latitude, longitude ))
+                        .title(name)
+                        .snippet(email));
+                    }
+                }
+
+                @Override
+                public void onCancelled(@NonNull DatabaseError databaseError) {
+
+                }
+            });
 
             googleMap.setMyLocationEnabled(true);
-            googleMap.addMarker(new MarkerOptions().position(new LatLng(15.8697807 , 74.4867473)));
-            googleMap.addMarker(new MarkerOptions().position(new LatLng(15.872526, 74.488292)));
-            googleMap.addMarker(new MarkerOptions().position(new LatLng(15.868134, 74.492630)));
-            googleMap.addMarker(new MarkerOptions().position(new LatLng(15.869552, 74.492948)));
-            googleMap.addMarker(new MarkerOptions().position(new LatLng(15.877306, 74.491030)));
-            CameraUpdate update = CameraUpdateFactory.newLatLngZoom(new LatLng(15.8697807 , 74.4867473),
-                    14);
-            googleMap.moveCamera(update);
+            googleMap.getUiSettings().setZoomControlsEnabled(true);
+
+            googleMap.getUiSettings().setScrollGesturesEnabled(true);
+//            CameraUpdate update = CameraUpdateFactory.newLatLngZoom(new LatLng(15.8697807 , 74.4867473),
+//                    14);
+//            googleMap.moveCamera(update);
 
         }
     };
@@ -56,7 +86,7 @@ public class HomeFragment extends Fragment {
     public View onCreateView(@NonNull LayoutInflater inflater,
                              @Nullable ViewGroup container,
                              @Nullable Bundle savedInstanceState) {
-        return inflater.inflate(R.layout.fragment_maps, container, false);
+        return inflater.inflate(R.layout.fragment_home, container, false);
     }
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {

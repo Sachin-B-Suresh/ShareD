@@ -6,6 +6,7 @@ import android.view.View;
 import android.view.Menu;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.RequestOptions;
@@ -13,7 +14,10 @@ import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.snackbar.Snackbar;
 import com.google.android.material.navigation.NavigationView;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.navigation.NavController;
+import androidx.navigation.NavDestination;
 import androidx.navigation.Navigation;
 import androidx.navigation.ui.AppBarConfiguration;
 import androidx.navigation.ui.NavigationUI;
@@ -22,26 +26,26 @@ import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 
-public class NavBar extends AppCompatActivity {
+public class NavBar extends AppCompatActivity{
 
     private AppBarConfiguration mAppBarConfiguration;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_maps_view);
+        setContentView(R.layout.activity_nav);
         final DatabaseHelper databaseHelper = new DatabaseHelper(this);
         String[] userDetails=databaseHelper.fetchLocalInstance();
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-        FloatingActionButton fab = findViewById(R.id.fab);
+        final FloatingActionButton fab = findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 Snackbar.make(view, "Signing Out", Snackbar.LENGTH_LONG)
                         .setAction("Action", null).show();
                 databaseHelper.deleteInstance();
-                Intent intent = new Intent(NavBar.this, SigninSignupActivity.class);
+                Intent intent = new Intent(NavBar.this, SignInSignUpActivity.class);
                 startActivity(intent);
                 finish();
             }
@@ -58,6 +62,27 @@ public class NavBar extends AppCompatActivity {
         NavigationUI.setupActionBarWithNavController(this, navController, mAppBarConfiguration);
         NavigationUI.setupWithNavController(navigationView, navController);
 
+
+        navController.addOnDestinationChangedListener(new NavController.OnDestinationChangedListener() {
+            @Override
+            public void onDestinationChanged(@NonNull NavController controller, @NonNull NavDestination destination, @Nullable Bundle arguments) {
+
+                int menuId = destination.getId();
+
+                switch (menuId){
+                    case R.id.nav_gallery:
+                        Toast.makeText(NavBar.this,"You tapped gallery",Toast.LENGTH_LONG).show();
+                        fab.hide();
+                        break;
+                    default:
+                        fab.show();
+                        break;
+                }
+
+            }
+        });
+
+        //changing profile info
         NavigationView mNavigationView = findViewById(R.id.nav_view);
         View headerView = mNavigationView.getHeaderView(0);
         // get user name and email textViews
@@ -75,7 +100,7 @@ public class NavBar extends AppCompatActivity {
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.maps_view, menu);
+        getMenuInflater().inflate(R.menu.nav, menu);
         return true;
     }
 
@@ -85,4 +110,5 @@ public class NavBar extends AppCompatActivity {
         return NavigationUI.navigateUp(navController, mAppBarConfiguration)
                 || super.onSupportNavigateUp();
     }
+
 }

@@ -2,12 +2,6 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.example.qrcodescanner">
 
-    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
-    <uses-permission android:name="android.permission.INTERNET" />
-    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
-    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
-    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
-
     <application
         android:allowBackup="true"
         android:icon="@drawable/splash"
@@ -28,16 +22,13 @@
             android:label="@string/title_activity_maps_view"
             android:theme="@style/AppTheme.NoActionBar" />
         <activity
-            android:name=".AdminActivity"
-            android:screenOrientation="portrait" />
-        <activity
-            android:name=".AboutUs"
-            android:screenOrientation="portrait" />
-        <activity
             android:name=".SplashScreen"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".SigninSignupActivity"
+            android:name=".SignInSignUpActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".GetUserLocation"
             android:screenOrientation="portrait" />
         <activity
             android:name=".MainActivity"
@@ -53,5 +44,11 @@
             android:name="com.google.android.geo.API_KEY"
             android:value="@string/google_maps_key" />
     </application>
+    <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
 
 </manifest>

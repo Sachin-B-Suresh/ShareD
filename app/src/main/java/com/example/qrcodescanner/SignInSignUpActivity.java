@@ -34,7 +34,8 @@ import com.ibm.cloud.appid.android.api.tokens.RefreshToken;
 import com.ibm.mobilefirstplatform.clientsdk.android.core.api.BMSClient;
 
 
-public class SigninSignupActivity extends AppCompatActivity {
+public class SignInSignUpActivity extends AppCompatActivity {
+    private LatLng userLocation;
     private static final int REQUEST_CODE = 1;
     private AppID appId;
     private BMSClient bmsClient;
@@ -48,11 +49,10 @@ public class SigninSignupActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_signinsignup);
-
-        //Below code is to get users current location
+        //code written below is to get users current location
         fusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(this);
         if(verifyPermissions()){
-           // getLastKnownLocation();
+            // getLastKnownLocation();
         }
         bmsClient = BMSClient.getInstance();
         appId = AppID.getInstance();
@@ -100,7 +100,7 @@ public class SigninSignupActivity extends AppCompatActivity {
                 permissions[3]) == PackageManager.PERMISSION_GRANTED){
             return  true;
         }else{
-            ActivityCompat.requestPermissions(SigninSignupActivity.this,
+            ActivityCompat.requestPermissions(SignInSignUpActivity.this,
                     permissions,
                     REQUEST_CODE);
             return true;
@@ -111,6 +111,7 @@ public class SigninSignupActivity extends AppCompatActivity {
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
         verifyPermissions();
     }
+
     //Users Current Location
     private void getLastKnownLocation(){
         fusedLocationProviderClient.getLastLocation().addOnCompleteListener(new OnCompleteListener<Location>() {
@@ -118,7 +119,7 @@ public class SigninSignupActivity extends AppCompatActivity {
             public void onComplete(@NonNull Task<Location> task) {
                 if(task.isSuccessful()){
                     Location location=task.getResult();
-                    LatLng userLocation= new LatLng(location.getLatitude(),location.getLongitude());
+                    userLocation= new LatLng(location.getLatitude(),location.getLongitude());
                     Log.d("Map latlng location",location.getLatitude() + " and " + location.getLongitude());
                 }
             }
@@ -158,7 +159,7 @@ public class SigninSignupActivity extends AppCompatActivity {
                         identityToken.getName(),
                         refresh_token);
                 Log.d("Name",identityToken.getName());
-                Intent intent = new Intent(SigninSignupActivity.this, NavBar.class);
+                Intent intent = new Intent(SignInSignUpActivity.this, NavBar.class);
                 startActivity(intent);
                 finish();
             }
@@ -192,11 +193,11 @@ public class SigninSignupActivity extends AppCompatActivity {
                             refresh_token,
                             identityToken.getName(),
                             null);
-                    Intent intent = new Intent(SigninSignupActivity.this, NavBar.class);
+                    Intent intent = new Intent(SignInSignUpActivity.this, GetUserLocation.class);
                     startActivity(intent);
                     finish();
                 } else {
-                    Toast.makeText(SigninSignupActivity.this, "Email Verification Required", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(SignInSignUpActivity.this, "Email Verification Required", Toast.LENGTH_SHORT).show();
                 }
             }
         });
@@ -226,4 +227,3 @@ public class SigninSignupActivity extends AppCompatActivity {
         });
     }
 }
-

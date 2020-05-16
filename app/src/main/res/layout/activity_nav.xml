@@ -15,10 +15,10 @@
         android:layout_gravity="start"
         android:fitsSystemWindows="true"
         app:headerLayout="@layout/nav_header_maps_view"
-        app:menu="@menu/activity_maps_view_drawer" />
+        app:menu="@menu/activity_nav_drawer" />
 
     <include
-        layout="@layout/app_bar_maps_view"
+        layout="@layout/app_bar_nav"
         android:layout_width="match_parent"
         android:layout_height="match_parent" />
 

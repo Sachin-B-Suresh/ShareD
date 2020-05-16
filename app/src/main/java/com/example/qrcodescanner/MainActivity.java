@@ -56,7 +56,7 @@ public class MainActivity extends AppCompatActivity {
                 verifyPermissions();
                 if(databaseHelper.isDatabaseTableEmpty()){
                     Toast.makeText(MainActivity.this, "No Local Instance, Please Login", Toast.LENGTH_SHORT).show();
-                    Intent intent = new Intent(MainActivity.this, SigninSignupActivity.class);
+                    Intent intent = new Intent(MainActivity.this, SignInSignUpActivity.class);
                     startActivity(intent);
                     finish();
                 }
@@ -67,14 +67,16 @@ public class MainActivity extends AppCompatActivity {
                     AppID.getInstance().signinWithRefreshToken(getApplicationContext(), refreshTokenString, new AuthorizationListener() {
                         @Override
                         public void onAuthorizationFailure(AuthorizationException exception) {
-                            Intent intent = new Intent(MainActivity.this, SigninSignupActivity.class);
+                            databaseHelper.deleteInstance();
+                            Intent intent = new Intent(MainActivity.this, SignInSignUpActivity.class);
                             startActivity(intent);
                             finish();
                         }
 
                         @Override
                         public void onAuthorizationCanceled() {
-                            Intent intent = new Intent(MainActivity.this, SigninSignupActivity.class);
+                            databaseHelper.deleteInstance();
+                            Intent intent = new Intent(MainActivity.this, SignInSignUpActivity.class);
                             startActivity(intent);
                             finish();
                         }

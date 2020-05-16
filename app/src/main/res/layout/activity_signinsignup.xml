@@ -5,23 +5,23 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".SigninSignupActivity"
+    tools:context=".SignInSignUpActivity"
     android:padding="16dp"
     android:gravity="center"
-    android:background="@color/blue20">
+    android:background="@color/bule90">
 
 
         <ImageView
             android:layout_width="wrap_content"
             android:layout_height="320dp"
-            android:src="@drawable/login"/>
+            android:src="@drawable/ibmblue"/>
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:fontFamily="serif-monospace"
             android:text="@string/ShareD"
-            android:textColor="@color/gray100"
+            android:textColor="#ffffff"
             android:textSize="48sp"
             android:textStyle="bold" />
 
@@ -41,7 +41,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/ForgotPassword"
-            android:textColor="@color/gray100"
+            android:textColor="#ffffff"
             android:textSize="12dp"
             android:layout_marginTop="4dp"/>
 
