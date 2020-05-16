@@ -6,20 +6,35 @@
     <group android:checkableBehavior="single">
         <item
             android:id="@+id/nav_home"
-            android:icon="@drawable/ic_menu_camera"
+            android:icon="@drawable/ic_home_black_24dp"
             android:title="@string/menu_home" />
         <item
-            android:id="@+id/nav_gallery"
-            android:icon="@drawable/ic_menu_gallery"
-            android:title="Notifications" />
+            android:id="@+id/nav_requests"
+            android:icon="@drawable/ic_local_library_black_24dp"
+            android:title="Requests"/>
         <item
-            android:id="@+id/nav_slideshow"
-            android:icon="@drawable/ic_menu_slideshow"
+            android:id="@+id/nav_call_in_a_favour"
+            android:icon="@drawable/ic_add_circle_black_24dp"
+            android:title="Call In a Favour" />
+        <item
+            android:id="@+id/nav_my_posts"
+            android:icon="@drawable/ic_library_books_black_24dp"
             android:title="My Posts" />
         <item
-            android:id="@+id/nav_logout"
-            android:icon="@drawable/logout"
-            android:title="Logout">
-        </item>
+            android:id="@+id/nav_my_contributions"
+            android:icon="@drawable/ic_collections_bookmark_black_24dp"
+            android:title="My Contributions"/>
+        <item
+            android:id="@+id/nav_settings"
+            android:icon="@drawable/ic_settings_black_24dp"
+            android:title="Settings"/>
+        <item
+            android:id="@+id/nav_help"
+            android:icon="@drawable/ic_help_black_24dp"
+            android:title="Help"/>
+        <item
+            android:id="@+id/nav_sign_out"
+            android:icon="@drawable/ic_power_settings_new_black_24dp"
+            android:title="Sign Out"/>
     </group>
 </menu>

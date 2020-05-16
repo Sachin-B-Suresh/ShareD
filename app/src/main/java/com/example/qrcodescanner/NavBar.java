@@ -38,24 +38,15 @@ public class NavBar extends AppCompatActivity{
         String[] userDetails=databaseHelper.fetchLocalInstance();
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-        final FloatingActionButton fab = findViewById(R.id.fab);
-        fab.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Snackbar.make(view, "Signing Out", Snackbar.LENGTH_LONG)
-                        .setAction("Action", null).show();
-                databaseHelper.deleteInstance();
-                Intent intent = new Intent(NavBar.this, SignInSignUpActivity.class);
-                startActivity(intent);
-                finish();
-            }
-        });
+
         DrawerLayout drawer = findViewById(R.id.drawer_layout);
         NavigationView navigationView = findViewById(R.id.nav_view);
         // Passing each menu ID as a set of Ids because each
         // menu should be considered as top level destinations.
         mAppBarConfiguration = new AppBarConfiguration.Builder(
-                R.id.nav_home, R.id.nav_gallery, R.id.nav_slideshow)
+                R.id.nav_home, R.id.nav_requests, R.id.nav_call_in_a_favour,
+                R.id.nav_my_posts, R.id.nav_my_contributions, R.id.nav_settings,
+                R.id.nav_help, R.id.nav_sign_out)
                 .setDrawerLayout(drawer)
                 .build();
         NavController navController = Navigation.findNavController(this, R.id.nav_host_fragment);
@@ -66,16 +57,17 @@ public class NavBar extends AppCompatActivity{
         navController.addOnDestinationChangedListener(new NavController.OnDestinationChangedListener() {
             @Override
             public void onDestinationChanged(@NonNull NavController controller, @NonNull NavDestination destination, @Nullable Bundle arguments) {
-
                 int menuId = destination.getId();
-
                 switch (menuId){
-                    case R.id.nav_gallery:
-                        Toast.makeText(NavBar.this,"You tapped gallery",Toast.LENGTH_LONG).show();
-                        fab.hide();
+                    case R.id.nav_requests:
                         break;
+                    case R.id.nav_sign_out:
+                        Toast.makeText(NavBar.this,"Signed Out",Toast.LENGTH_SHORT).show();
+                        databaseHelper.deleteInstance();
+                        Intent intent = new Intent(NavBar.this, SignInSignUpActivity.class);
+                        startActivity(intent);
+                        finish();
                     default:
-                        fab.show();
                         break;
                 }
 

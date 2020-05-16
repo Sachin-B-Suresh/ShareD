@@ -1,4 +1,4 @@
-package com.example.qrcodescanner.ui.gallery;
+package com.example.qrcodescanner.ui.myposts;
 
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -13,17 +13,17 @@ import androidx.lifecycle.ViewModelProviders;
 
 import com.example.qrcodescanner.R;
 
-public class GalleryFragment extends Fragment {
+public class MyPostsFragment extends Fragment {
 
-    private GalleryViewModel galleryViewModel;
+    private MyPostsViewModel myPostsViewModel;
 
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
-        galleryViewModel =
-                ViewModelProviders.of(this).get(GalleryViewModel.class);
-        View root = inflater.inflate(R.layout.fragment_gallery, container, false);
-        final TextView textView = root.findViewById(R.id.text_gallery);
-        galleryViewModel.getText().observe(getViewLifecycleOwner(), new Observer<String>() {
+        myPostsViewModel =
+                ViewModelProviders.of(this).get(MyPostsViewModel.class);
+        View root = inflater.inflate(R.layout.fragment_my_posts, container, false);
+        final TextView textView = root.findViewById(R.id.text_slideshow);
+        myPostsViewModel.getText().observe(getViewLifecycleOwner(), new Observer<String>() {
             @Override
             public void onChanged(@Nullable String s) {
                 textView.setText(s);

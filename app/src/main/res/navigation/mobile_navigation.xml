@@ -11,14 +11,41 @@
         android:label="@string/menu_home"
         tools:layout="@layout/fragment_home">
     </fragment>
+
     <fragment
-        android:id="@+id/nav_gallery"
-        android:name="com.example.qrcodescanner.ui.gallery.GalleryFragment"
-        android:label="@string/menu_gallery"
-        tools:layout="@layout/fragment_gallery" />
+        android:id="@+id/nav_requests"
+        android:name="com.example.qrcodescanner.ui.requests.RequestsFragment"
+        android:label="@string/menu_requests"
+        tools:layout="@layout/fragment_requests" />
     <fragment
-        android:id="@+id/nav_slideshow"
-        android:name="com.example.qrcodescanner.ui.slideshow.SlideshowFragment"
-        android:label="@string/menu_slideshow"
-        tools:layout="@layout/fragment_slideshow" />
+        android:id="@+id/nav_call_in_a_favour"
+        android:name="com.example.qrcodescanner.ui.callinafavour.CallInAFavourFragment"
+        android:label="@string/menu_call_in_a_favour"
+        tools:layout="@layout/fragment_call_in_a_favour" />
+    <fragment
+        android:id="@+id/nav_my_posts"
+        android:name="com.example.qrcodescanner.ui.myposts.MyPostsFragment"
+        android:label="@string/menu_my_posts"
+        tools:layout="@layout/fragment_my_posts" />
+    <fragment
+        android:id="@+id/nav_my_contributions"
+        android:name="com.example.qrcodescanner.ui.mycontributions.MyContributionsFragment"
+        android:label="@string/menu_my_contributions"
+        tools:layout="@layout/fragment_my_contributions" />
+    <fragment
+        android:id="@+id/nav_settings"
+        android:name="com.example.qrcodescanner.ui.settings.SettingsFragment"
+        android:label="@string/menu_settings"
+        tools:layout="@layout/fragment_settings" />
+    <fragment
+        android:id="@+id/nav_help"
+        android:name="com.example.qrcodescanner.ui.help.HelpFragment"
+        android:label="@string/menu_help"
+        tools:layout="@layout/fragment_help" />
+    <fragment
+        android:id="@+id/nav_sign_out"
+        android:name="com.example.qrcodescanner.ui.help.HelpFragment"
+        android:label="@string/menu_sign_out"
+        tools:layout="@layout/fragment_sign_out" />
+
 </navigation>
