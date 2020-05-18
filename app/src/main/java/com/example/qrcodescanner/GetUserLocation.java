@@ -27,7 +27,8 @@ import java.util.HashMap;
 public class GetUserLocation extends AppCompatActivity {
     String name,email,lat,lng;
     FirebaseDatabase database = FirebaseDatabase.getInstance();
-    DatabaseReference myRef = database.getReference("Users");
+    DatabaseReference userRef = database.getReference("Users");
+    DatabaseReference newUserRef = userRef.push();
     DatabaseHelper databaseHelper;
     private FusedLocationProviderClient fusedLocationProviderClient;
     LatLng userLocation;
@@ -60,9 +61,8 @@ public class GetUserLocation extends AppCompatActivity {
                     userEntry.put("email", userDetails[0]);
                     userEntry.put("name", userDetails[2]);
                     userEntry.put("location",userLocation);
-                    myRef.child(userDetails[2]).setValue(userEntry); //using name as child value
+                    newUserRef.setValue(userEntry);
                     Toast.makeText(GetUserLocation.this, "Location "+ location.getLatitude()+location.getLongitude(), Toast.LENGTH_SHORT).show();
-                    Log.d("Map latlng location",location.getLatitude() + " and " + location.getLongitude());
                     Intent intent = new Intent(GetUserLocation.this, NavBar.class);
                     startActivity(intent);
                     finish();

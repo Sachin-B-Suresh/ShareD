@@ -52,7 +52,7 @@ public class CallInAFavourFragment extends Fragment implements AdapterView.OnIte
                              @Nullable Bundle savedInstanceState) {
         View v = inflater.inflate(R.layout.fragment_call_in_a_favour, container, false);
         databaseHelper = new DatabaseHelper(getActivity());
-        userDetails=databaseHelper.fetchLocalInstance();
+        userDetails = databaseHelper.fetchLocalInstance();
         submitButton = (Button) v.findViewById(R.id.submit);
         editTextDescription = (EditText) v.findViewById(R.id.description1);
         String [] values =
