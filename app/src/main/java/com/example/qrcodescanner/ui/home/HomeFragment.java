@@ -14,6 +14,7 @@ import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
 
+import com.example.qrcodescanner.DatabaseHelper;
 import com.example.qrcodescanner.MainActivity;
 import com.example.qrcodescanner.R;
 import com.google.android.gms.location.FusedLocationProviderClient;
@@ -34,6 +35,10 @@ public class HomeFragment extends Fragment {
     private FusedLocationProviderClient fusedLocationProviderClient;
     FirebaseDatabase database = FirebaseDatabase.getInstance();
     DatabaseReference myRef = database.getReference("Users");
+    Double latitude;
+    Double longitude;
+    String name;
+    String email;
 
     private OnMapReadyCallback callback = new OnMapReadyCallback() {
         /**
@@ -51,33 +56,27 @@ public class HomeFragment extends Fragment {
                 @Override
                 public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                     for(DataSnapshot snapshot : dataSnapshot.getChildren()){
-
 //                        Log.d("firebase data",snapshot.child("location/latitude").getValue().toString());
-                        Double latitude = (Double) snapshot.child("location/latitude").getValue();
-                        Double longitude = (Double) snapshot.child("location/longitude").getValue();
-                        String name = snapshot.child("name").getValue().toString();
-                        String email = snapshot.child("email").getValue().toString();
-
+                         latitude = (Double) snapshot.child("location/latitude").getValue();
+                         longitude = (Double) snapshot.child("location/longitude").getValue();
+                         name = snapshot.child("name").getValue().toString();
+                         email = snapshot.child("email").getValue().toString();
                         googleMap.addMarker(new MarkerOptions()
                                 .position(new LatLng(latitude, longitude ))
-                        .title(name)
-                        .snippet(email));
+                                .title(name)
+                                .snippet(email));
                     }
+                    CameraUpdate update = CameraUpdateFactory.newLatLngZoom(new LatLng(latitude , longitude),14);
+                    googleMap.moveCamera(update);
                 }
 
                 @Override
                 public void onCancelled(@NonNull DatabaseError databaseError) {
-
                 }
             });
-
             googleMap.setMyLocationEnabled(true);
             googleMap.getUiSettings().setZoomControlsEnabled(true);
-
             googleMap.getUiSettings().setScrollGesturesEnabled(true);
-//            CameraUpdate update = CameraUpdateFactory.newLatLngZoom(new LatLng(15.8697807 , 74.4867473),
-//                    14);
-//            googleMap.moveCamera(update);
 
         }
     };

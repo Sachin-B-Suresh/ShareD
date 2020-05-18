@@ -86,7 +86,6 @@ public class SignInSignUpActivity extends AppCompatActivity {
     }
     private boolean verifyPermissions(){
         String[] permissions = {Manifest.permission.ACCESS_FINE_LOCATION,
-                Manifest.permission.ACCESS_COARSE_LOCATION,
                 Manifest.permission.READ_EXTERNAL_STORAGE,
                 Manifest.permission.WRITE_EXTERNAL_STORAGE,};
 
@@ -95,9 +94,7 @@ public class SignInSignUpActivity extends AppCompatActivity {
                 && ContextCompat.checkSelfPermission(this.getApplicationContext(),
                 permissions[1]) == PackageManager.PERMISSION_GRANTED
                 && ContextCompat.checkSelfPermission(this.getApplicationContext(),
-                permissions[2]) == PackageManager.PERMISSION_GRANTED
-                && ContextCompat.checkSelfPermission(this.getApplicationContext(),
-                permissions[3]) == PackageManager.PERMISSION_GRANTED){
+                permissions[2]) == PackageManager.PERMISSION_GRANTED){
             return  true;
         }else{
             ActivityCompat.requestPermissions(SignInSignUpActivity.this,

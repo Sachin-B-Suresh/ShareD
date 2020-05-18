@@ -2,15 +2,19 @@ package com.example.qrcodescanner;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
 
 import android.content.Intent;
 import android.location.Location;
 import android.os.Bundle;
 import android.util.Log;
+import android.widget.Button;
 import android.widget.Toast;
 
 import com.google.android.gms.location.FusedLocationProviderClient;
 import com.google.android.gms.location.LocationServices;
+import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
@@ -18,6 +22,7 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
 import java.util.HashMap;
+
 
 public class GetUserLocation extends AppCompatActivity {
     String name,email,lat,lng;
@@ -27,6 +32,13 @@ public class GetUserLocation extends AppCompatActivity {
     private FusedLocationProviderClient fusedLocationProviderClient;
     LatLng userLocation;
     String[] userDetails = new String[4];
+
+
+
+    private GoogleMap mMap;
+    Button btn;
+    private final static int PLACE_PICKER_REQUEST = 999;
+    private final static int LOCATION_REQUEST_CODE = 23;
 
 
     @Override
@@ -57,9 +69,5 @@ public class GetUserLocation extends AppCompatActivity {
                 }
             }
         });
-    }
-    //Users Current Location
-    private void getLastKnownLocation(){
-
     }
 }

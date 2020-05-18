@@ -4,4 +4,5 @@ import androidx.lifecycle.ViewModel;
 
 public class CallInAFavourViewModel extends ViewModel {
     // TODO: Implement the ViewModel
+
 }
