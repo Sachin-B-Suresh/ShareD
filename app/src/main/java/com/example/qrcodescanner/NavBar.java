@@ -1,7 +1,9 @@
 package com.example.qrcodescanner;
 
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Handler;
 import android.view.View;
 import android.view.Menu;
 import android.widget.ImageView;
@@ -16,6 +18,7 @@ import com.google.android.material.navigation.NavigationView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.appcompat.app.AlertDialog;
 import androidx.navigation.NavController;
 import androidx.navigation.NavDestination;
 import androidx.navigation.Navigation;
@@ -32,6 +35,7 @@ public class NavBar extends AppCompatActivity{
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        boolean doubleBackToExitPressedOnce = false;
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_nav);
         final DatabaseHelper databaseHelper = new DatabaseHelper(this);
@@ -53,7 +57,7 @@ public class NavBar extends AppCompatActivity{
         NavigationUI.setupActionBarWithNavController(this, navController, mAppBarConfiguration);
         NavigationUI.setupWithNavController(navigationView, navController);
 
-
+        final AlertDialog.Builder builder = new AlertDialog.Builder(this);
         navController.addOnDestinationChangedListener(new NavController.OnDestinationChangedListener() {
             @Override
             public void onDestinationChanged(@NonNull NavController controller, @NonNull NavDestination destination, @Nullable Bundle arguments) {
@@ -62,11 +66,27 @@ public class NavBar extends AppCompatActivity{
                     case R.id.nav_requests:
                         break;
                     case R.id.nav_sign_out:
-                        Toast.makeText(NavBar.this,"Signed Out",Toast.LENGTH_SHORT).show();
-                        databaseHelper.deleteInstance();
-                        Intent intent = new Intent(NavBar.this, SignInSignUpActivity.class);
-                        startActivity(intent);
-                        finish();
+//                        DialogInterface.OnClickListener dialogClickListener = new DialogInterface.OnClickListener() {
+//                            @Override
+//                            public void onClick(DialogInterface dialog, int which) {
+//                                switch (which){
+//                                    case DialogInterface.BUTTON_POSITIVE:
+                                        //Yes button clicked
+                                        Toast.makeText(NavBar.this,"Signed Out",Toast.LENGTH_SHORT).show();
+                                        databaseHelper.deleteInstance();
+                                        Intent intent = new Intent(NavBar.this, SignInSignUpActivity.class);
+                                        startActivity(intent);
+                                        finish();
+//                                        break;
+//
+//                                    case DialogInterface.BUTTON_NEGATIVE:
+//                                        //No button clicked
+//                                        break;
+//                                }
+//                            }
+//                        };
+//                        builder.setMessage("Are you sure?").setPositiveButton("Yes", dialogClickListener)
+//                                .setNegativeButton("No", dialogClickListener).show();
                     default:
                         break;
                 }
@@ -102,5 +122,25 @@ public class NavBar extends AppCompatActivity{
         return NavigationUI.navigateUp(navController, mAppBarConfiguration)
                 || super.onSupportNavigateUp();
     }
+    boolean doubleBackToExitPressedOnce = false;
+
+    @Override
+    public void onBackPressed() {
+        if (doubleBackToExitPressedOnce) {
+            super.onBackPressed();
+            return;
+        }
+
+        this.doubleBackToExitPressedOnce = true;
+        Toast.makeText(this, "Please click BACK again to exit", Toast.LENGTH_SHORT).show();
+
+        new Handler().postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                doubleBackToExitPressedOnce=false;
+            }
+        }, 2000);
+    }
+
 
 }

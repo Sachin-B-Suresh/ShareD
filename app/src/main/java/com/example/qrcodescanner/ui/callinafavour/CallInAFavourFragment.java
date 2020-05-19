@@ -19,8 +19,10 @@ import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Spinner;
+import android.widget.Toast;
 
 import com.example.qrcodescanner.DatabaseHelper;
+import com.example.qrcodescanner.NavBar;
 import com.example.qrcodescanner.R;
 import com.example.qrcodescanner.ui.home.HomeFragment;
 import com.google.firebase.database.DatabaseReference;
@@ -81,11 +83,12 @@ public class CallInAFavourFragment extends Fragment implements AdapterView.OnIte
                 userRequest.put("RequestedItem",spinnerItem);
                 userRequest.put("Description",descriptionItem);
                 newRequestRef.setValue(userRequest);
-                fragment = new HomeFragment();
-                FragmentTransaction transaction = getFragmentManager().beginTransaction();
-                transaction.replace(R.id.nav_host_fragment, fragment);
-                transaction.addToBackStack(null);
-                transaction.commit();
+                Toast.makeText(getActivity(),"Request Submitted",Toast.LENGTH_LONG).show();
+//                fragment = new HomeFragment();
+//                FragmentTransaction transaction = getFragmentManager().beginTransaction();
+//                transaction.replace(R.id.nav_host_fragment, fragment);
+//                transaction.addToBackStack(null);
+//                transaction.commit();
             }
         });
         return v;
