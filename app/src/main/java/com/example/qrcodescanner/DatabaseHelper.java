@@ -82,5 +82,23 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         db.execSQL("Drop table if exists "+TABLE_NAME);
         onCreate(db);
     }
-
+    public String getEmail(){
+        String[] columns = {"email"};
+        SQLiteDatabase db= this.getReadableDatabase();
+        Cursor cursor = db.query(TABLE_NAME, columns, null, null, null, null, null);
+        cursor.moveToLast();
+        Log.d(LOGTAG,cursor.getColumnName(0));
+        String row;
+        row=cursor.getString(cursor.getColumnIndex("email"));
+        Log.d("table content",row);
+        if(cursor.getCount()>0)
+        {
+            while (cursor.moveToNext())
+            {
+                String code = cursor.getString( cursor.getColumnIndex("name") );
+                Log.d(LOGTAG,"Database query result:"+code );
+            }
+        }
+        return row;
+    }
 }

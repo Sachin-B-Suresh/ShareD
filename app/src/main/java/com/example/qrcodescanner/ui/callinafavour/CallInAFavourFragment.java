@@ -74,14 +74,19 @@ public class CallInAFavourFragment extends Fragment implements AdapterView.OnIte
             public void onClick(View v)
             {
                 // do something
+                Long tsLong = System.currentTimeMillis()/1000;
+                String ts = tsLong.toString();
                 descriptionItem=editTextDescription.getText().toString();
+                editTextDescription.setText("");
                 Log.d("Edittext",descriptionItem);
                 Log.d("Spinner item", spinnerItem);
                 HashMap<String, Object> userRequest = new HashMap<>();
-                userRequest.put("Email", userDetails[0]);
-                userRequest.put("Name", userDetails[2]);
+                userRequest.put("RequesterEmail", userDetails[0]);
+                userRequest.put("Requester", userDetails[2]);
                 userRequest.put("RequestedItem",spinnerItem);
                 userRequest.put("Description",descriptionItem);
+                userRequest.put("TimeStamp",tsLong);
+                userRequest.put("AccepterEmail","");
                 newRequestRef.setValue(userRequest);
                 Toast.makeText(getActivity(),"Request Submitted",Toast.LENGTH_LONG).show();
 //                fragment = new HomeFragment();

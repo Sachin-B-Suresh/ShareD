@@ -17,6 +17,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
+import com.example.qrcodescanner.DatabaseHelper;
 import com.example.qrcodescanner.R;
 import com.google.android.gms.maps.CameraUpdate;
 import com.google.android.gms.maps.CameraUpdateFactory;
@@ -29,9 +30,11 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 public class RequestsFragment extends Fragment {
+    DatabaseHelper databaseHelper;
     FirebaseDatabase database = FirebaseDatabase.getInstance();
     DatabaseReference requestsRef = database.getReference("Requests");
     List<String> name_array=new ArrayList<String>();
@@ -46,22 +49,28 @@ public class RequestsFragment extends Fragment {
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container,
                              @Nullable Bundle savedInstanceState) {
+        databaseHelper= new DatabaseHelper(getActivity());
+        String loggedInUserEmail= databaseHelper.getEmail();
+
 
         View view =inflater.inflate(R.layout.fragment_requests, container, false);
         final RecyclerView recyclerView =view.findViewById(R.id.recycler_view);
         recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
 
 
-        requestsRef.addValueEventListener(new ValueEventListener() {
+        requestsRef.orderByChild("TimeStamp").limitToLast(5).addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 for(DataSnapshot snapshot : dataSnapshot.getChildren()){
-                        Log.d("firebase data",snapshot.child("Name").getValue().toString());
-                    name_array.add(snapshot.child("Name").getValue().toString());
+                        Log.d("firebase data",snapshot.child("Requester").getValue().toString());
+                    name_array.add(snapshot.child("Requester").getValue().toString());
                     requested_item_array.add(snapshot.child("RequestedItem").getValue().toString());
                     description_array.add(snapshot.child("Description").getValue().toString());
                     Log.d("Content of list", String.valueOf(name_array.size()));
                 }
+                Collections.reverse(name_array);
+                Collections.reverse(requested_item_array);
+                Collections.reverse(description_array);
                 recyclerView.setAdapter(new RecyclerViewAdapter());
             }
             @Override
@@ -99,7 +108,7 @@ public class RequestsFragment extends Fragment {
 
         @Override
         public void onBindViewHolder(@NonNull RecyclerViewHolder holder, int position) {
-            holder.nameTextView.setText("Name: " + name_array.get(position));
+            holder.nameTextView.setText(name_array.get(position));
             holder.emailTextView.setText("Requested Item: " + requested_item_array.get(position));
             holder.descriptionTextView.setText("Description: " + description_array.get(position));
         }
