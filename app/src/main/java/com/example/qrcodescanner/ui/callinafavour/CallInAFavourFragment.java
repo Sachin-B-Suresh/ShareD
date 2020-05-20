@@ -87,6 +87,9 @@ public class CallInAFavourFragment extends Fragment implements AdapterView.OnIte
                 userRequest.put("Description",descriptionItem);
                 userRequest.put("TimeStamp",tsLong);
                 userRequest.put("AccepterEmail","");
+                userRequest.put("AccepterName","");
+                userRequest.put("Status","Open");
+                userRequest.put("Action","Incomplete");
                 newRequestRef.setValue(userRequest);
                 Toast.makeText(getActivity(),"Request Submitted",Toast.LENGTH_LONG).show();
 //                fragment = new HomeFragment();
