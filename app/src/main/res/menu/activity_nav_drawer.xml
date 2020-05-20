@@ -17,9 +17,9 @@
             android:icon="@drawable/ic_add_circle_black_24dp"
             android:title="Call In a Favour" />
         <item
-            android:id="@+id/nav_my_posts"
+            android:id="@+id/nav_my_requests"
             android:icon="@drawable/ic_library_books_black_24dp"
-            android:title="My Posts" />
+            android:title="My Requests" />
         <item
             android:id="@+id/nav_my_contributions"
             android:icon="@drawable/ic_collections_bookmark_black_24dp"

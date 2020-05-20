@@ -3,10 +3,14 @@
     android:layout_width="match_parent"
     android:layout_height="140dp"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:layout_margin="8dp"
-    app:cardCornerRadius="16dp"
+    android:layout_marginTop="16dp"
+    android:layout_marginLeft="16dp"
+    android:layout_marginRight="16dp"
+    app:cardCornerRadius="20dp"
     app:cardElevation="8dp"
     android:id="@+id/card_container"
+    android:clickable="true"
+    android:foreground="?attr/selectableItemBackgroundBorderless">
     >
     <LinearLayout
         android:background="@drawable/bg1"

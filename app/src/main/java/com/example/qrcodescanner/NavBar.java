@@ -49,7 +49,7 @@ public class NavBar extends AppCompatActivity{
         // menu should be considered as top level destinations.
         mAppBarConfiguration = new AppBarConfiguration.Builder(
                 R.id.nav_home, R.id.nav_requests, R.id.nav_call_in_a_favour,
-                R.id.nav_my_posts, R.id.nav_my_contributions, R.id.nav_settings,
+                R.id.nav_my_requests, R.id.nav_my_contributions, R.id.nav_settings,
                 R.id.nav_help, R.id.nav_sign_out)
                 .setDrawerLayout(drawer)
                 .build();

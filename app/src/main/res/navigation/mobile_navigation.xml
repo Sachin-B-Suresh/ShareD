@@ -23,10 +23,10 @@
         android:label="@string/menu_call_in_a_favour"
         tools:layout="@layout/fragment_call_in_a_favour" />
     <fragment
-        android:id="@+id/nav_my_posts"
-        android:name="com.example.qrcodescanner.ui.myposts.MyPostsFragment"
-        android:label="@string/menu_my_posts"
-        tools:layout="@layout/fragment_my_posts" />
+        android:id="@+id/nav_my_requests"
+        android:name="com.example.qrcodescanner.ui.myrequests.MyRequestsFragment"
+        android:label="@string/menu_my_requests"
+        tools:layout="@layout/fragment_my_requests" />
     <fragment
         android:id="@+id/nav_my_contributions"
         android:name="com.example.qrcodescanner.ui.mycontributions.MyContributionsFragment"
