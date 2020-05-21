@@ -1,9 +1,11 @@
-package com.example.qrcodescanner;
+package com.example.sharedcfc;
 
 import android.content.Intent;
 import android.os.Handler;
 import androidx.appcompat.app.AppCompatActivity;
 import android.os.Bundle;
+
+import com.example.qrcodescanner.R;
 
 public class SplashScreen extends AppCompatActivity {
     private static int SLPASH_TIME_OUT=2000;

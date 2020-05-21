@@ -1,4 +1,4 @@
-package com.example.qrcodescanner.ui.mycontributions;
+package com.example.sharedcfc.ui.mycontributions;
 
 import androidx.lifecycle.ViewModel;
 

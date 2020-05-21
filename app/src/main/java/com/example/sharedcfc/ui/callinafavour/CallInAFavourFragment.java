@@ -1,7 +1,5 @@
-package com.example.qrcodescanner.ui.callinafavour;
+package com.example.sharedcfc.ui.callinafavour;
 
-import androidx.annotation.StringRes;
-import androidx.fragment.app.FragmentTransaction;
 import androidx.lifecycle.ViewModelProviders;
 
 import android.os.Bundle;
@@ -21,10 +19,8 @@ import android.widget.EditText;
 import android.widget.Spinner;
 import android.widget.Toast;
 
-import com.example.qrcodescanner.DatabaseHelper;
-import com.example.qrcodescanner.NavBar;
+import com.example.sharedcfc.DatabaseHelper;
 import com.example.qrcodescanner.R;
-import com.example.qrcodescanner.ui.home.HomeFragment;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 

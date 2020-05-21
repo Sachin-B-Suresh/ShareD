@@ -1,4 +1,4 @@
-package com.example.qrcodescanner.ui.myrequests;
+package com.example.sharedcfc.ui.myrequests;
 
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;

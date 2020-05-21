@@ -1,4 +1,4 @@
-package com.example.qrcodescanner;
+package com.example.sharedcfc;
 
 import android.Manifest;
 import android.content.Intent;
@@ -19,6 +19,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 
+import com.example.qrcodescanner.R;
 import com.google.android.gms.location.FusedLocationProviderClient;
 import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.maps.model.LatLng;

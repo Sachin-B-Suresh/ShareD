@@ -1,4 +1,4 @@
-package com.example.qrcodescanner.ui.callinafavour;
+package com.example.sharedcfc.ui.callinafavour;
 
 import androidx.lifecycle.ViewModel;
 

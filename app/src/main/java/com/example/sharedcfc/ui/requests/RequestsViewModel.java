@@ -1,4 +1,4 @@
-package com.example.qrcodescanner.ui.requests;
+package com.example.sharedcfc.ui.requests;
 
 import androidx.lifecycle.ViewModel;
 

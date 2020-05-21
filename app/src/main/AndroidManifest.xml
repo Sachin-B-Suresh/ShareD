@@ -18,20 +18,20 @@
              You can define the keys for the debug and release targets in src/debug/ and src/release/.
         -->
         <activity
-            android:name=".NavBar"
+            android:name="com.example.sharedcfc.NavBar"
             android:label="@string/title_activity_maps_view"
             android:theme="@style/AppTheme.NoActionBar" />
         <activity
-            android:name=".SplashScreen"
+            android:name="com.example.sharedcfc.SplashScreen"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".SignInSignUpActivity"
+            android:name="com.example.sharedcfc.SignInSignUpActivity"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".GetUserLocation"
+            android:name="com.example.sharedcfc.GetUserLocation"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".MainActivity"
+            android:name="com.example.sharedcfc.MainActivity"
             android:screenOrientation="portrait">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />

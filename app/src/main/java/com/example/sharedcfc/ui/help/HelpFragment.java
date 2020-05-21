@@ -1,4 +1,4 @@
-package com.example.qrcodescanner.ui.help;
+package com.example.sharedcfc.ui.help;
 
 import androidx.lifecycle.ViewModelProviders;
 

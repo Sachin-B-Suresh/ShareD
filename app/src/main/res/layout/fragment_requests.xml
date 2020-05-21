@@ -5,5 +5,5 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:id="@+id/recycler_view"
-    tools:context="com.example.qrcodescanner.ui.requests.RequestsFragment">
+    tools:context="com.example.sharedcfc.ui.requests.RequestsFragment">
 </androidx.recyclerview.widget.RecyclerView>

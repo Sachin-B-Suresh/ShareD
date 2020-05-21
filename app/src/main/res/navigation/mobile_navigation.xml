@@ -7,44 +7,44 @@
 
     <fragment
         android:id="@+id/nav_home"
-        android:name="com.example.qrcodescanner.ui.home.HomeFragment"
+        android:name="com.example.sharedcfc.ui.home.HomeFragment"
         android:label="@string/menu_home"
         tools:layout="@layout/fragment_home">
     </fragment>
 
     <fragment
         android:id="@+id/nav_requests"
-        android:name="com.example.qrcodescanner.ui.requests.RequestsFragment"
+        android:name="com.example.sharedcfc.ui.requests.RequestsFragment"
         android:label="@string/menu_requests"
         tools:layout="@layout/fragment_requests" />
     <fragment
         android:id="@+id/nav_call_in_a_favour"
-        android:name="com.example.qrcodescanner.ui.callinafavour.CallInAFavourFragment"
+        android:name="com.example.sharedcfc.ui.callinafavour.CallInAFavourFragment"
         android:label="@string/menu_call_in_a_favour"
         tools:layout="@layout/fragment_call_in_a_favour" />
     <fragment
         android:id="@+id/nav_my_requests"
-        android:name="com.example.qrcodescanner.ui.myrequests.MyRequestsFragment"
+        android:name="com.example.sharedcfc.ui.myrequests.MyRequestsFragment"
         android:label="@string/menu_my_requests"
         tools:layout="@layout/fragment_my_requests" />
     <fragment
         android:id="@+id/nav_my_contributions"
-        android:name="com.example.qrcodescanner.ui.mycontributions.MyContributionsFragment"
+        android:name="com.example.sharedcfc.ui.mycontributions.MyContributionsFragment"
         android:label="@string/menu_my_contributions"
         tools:layout="@layout/fragment_my_contributions" />
     <fragment
         android:id="@+id/nav_settings"
-        android:name="com.example.qrcodescanner.ui.settings.SettingsFragment"
+        android:name="com.example.sharedcfc.ui.settings.SettingsFragment"
         android:label="@string/menu_settings"
         tools:layout="@layout/fragment_settings" />
     <fragment
         android:id="@+id/nav_help"
-        android:name="com.example.qrcodescanner.ui.help.HelpFragment"
+        android:name="com.example.sharedcfc.ui.help.HelpFragment"
         android:label="@string/menu_help"
         tools:layout="@layout/fragment_help" />
     <fragment
         android:id="@+id/nav_sign_out"
-        android:name="com.example.qrcodescanner.ui.help.HelpFragment"
+        android:name="com.example.sharedcfc.ui.help.HelpFragment"
         android:label="@string/menu_sign_out"
         tools:layout="@layout/fragment_sign_out" />
 

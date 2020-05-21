@@ -1,4 +1,4 @@
-package com.example.qrcodescanner;
+package com.example.sharedcfc;
 
 import android.content.ContentValues;
 import android.content.Context;

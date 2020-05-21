@@ -1,4 +1,4 @@
-package com.example.qrcodescanner.ui.mycontributions;
+package com.example.sharedcfc.ui.mycontributions;
 
 import androidx.appcompat.app.AlertDialog;
 import androidx.cardview.widget.CardView;
@@ -18,15 +18,9 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
-import android.widget.Toast;
 
-import com.example.qrcodescanner.DatabaseHelper;
-import com.example.qrcodescanner.MainActivity;
+import com.example.sharedcfc.DatabaseHelper;
 import com.example.qrcodescanner.R;
-import com.google.android.gms.maps.CameraUpdate;
-import com.google.android.gms.maps.CameraUpdateFactory;
-import com.google.android.gms.maps.model.LatLng;
-import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -38,7 +32,6 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Objects;
 
 public class MyContributionsFragment extends Fragment {
     DatabaseHelper databaseHelper;

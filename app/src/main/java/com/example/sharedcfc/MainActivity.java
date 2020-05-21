@@ -1,4 +1,4 @@
-package com.example.qrcodescanner;
+package com.example.sharedcfc;
 
 import android.Manifest;
 import android.content.Intent;
@@ -14,6 +14,7 @@ import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.example.qrcodescanner.R;
 import com.ibm.cloud.appid.android.api.AppID;
 import com.ibm.cloud.appid.android.api.AppIDAuthorizationManager;
 import com.ibm.cloud.appid.android.api.AuthorizationException;

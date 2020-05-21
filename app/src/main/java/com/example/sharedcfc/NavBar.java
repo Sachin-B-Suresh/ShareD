@@ -1,6 +1,5 @@
-package com.example.qrcodescanner;
+package com.example.sharedcfc;
 
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
@@ -12,8 +11,7 @@ import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.RequestOptions;
-import com.google.android.material.floatingactionbutton.FloatingActionButton;
-import com.google.android.material.snackbar.Snackbar;
+import com.example.qrcodescanner.R;
 import com.google.android.material.navigation.NavigationView;
 
 import androidx.annotation.NonNull;

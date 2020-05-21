@@ -1,4 +1,4 @@
-package com.example.qrcodescanner.ui.logout;
+package com.example.sharedcfc.ui.logout;
 
 import androidx.lifecycle.ViewModelProviders;
 
