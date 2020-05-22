@@ -6,6 +6,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import android.content.Intent;
 import android.location.Location;
 import android.os.Bundle;
+import android.util.Log;
 import android.widget.Button;
 import android.widget.Toast;
 
@@ -18,12 +19,17 @@ import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.iid.FirebaseInstanceId;
+import com.google.firebase.iid.InstanceIdResult;
+import com.google.firebase.messaging.FirebaseMessaging;
 
 import java.util.HashMap;
 
 
 public class GetUserLocation extends AppCompatActivity {
+    private static final String TAG ="GetUserLocationActivity" ;
     String name,email,lat,lng;
+    String firebaseUserToken;
     FirebaseDatabase database = FirebaseDatabase.getInstance();
     DatabaseReference userRef = database.getReference("Users");
     DatabaseReference newUserRef = userRef.push();
@@ -44,6 +50,45 @@ public class GetUserLocation extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_get_user_location);
+        firebaseSetup();
+    }
+    public void firebaseSetup(){
+        // [START subscribe_topics]
+        FirebaseMessaging.getInstance().subscribeToTopic("LocationBasedChannel")
+                .addOnCompleteListener(new OnCompleteListener<Void>() {
+                    @Override
+                    public void onComplete(@NonNull Task<Void> task) {
+                        String msg = getString(R.string.msg_subscribed);
+                        if (!task.isSuccessful()) {
+                            msg = getString(R.string.msg_subscribe_failed);
+                        }
+                        Log.d(TAG, msg);
+                        Toast.makeText(GetUserLocation.this, msg, Toast.LENGTH_SHORT).show();
+                    }
+                });
+        // [END subscribe_topics]
+        // [START retrieve_current_token]
+        FirebaseInstanceId.getInstance().getInstanceId()
+                .addOnCompleteListener(new OnCompleteListener<InstanceIdResult>() {
+                    @Override
+                    public void onComplete(@NonNull Task<InstanceIdResult> task) {
+                        if (!task.isSuccessful()) {
+                            Log.w(TAG, "getInstanceId failed", task.getException());
+                            return;
+                        }
+
+                        // Get new Instance ID token
+                        firebaseUserToken = task.getResult().getToken();
+                        // Log and toast
+                        String msg = getString(R.string.msg_token_fmt, firebaseUserToken);
+                        Log.d(TAG, msg);
+                        Toast.makeText(GetUserLocation.this, msg, Toast.LENGTH_SHORT).show();
+                        getLocation();
+                    }
+                });
+        // [END retrieve_current_token]
+    }
+    public void getLocation(){
         databaseHelper = new DatabaseHelper(this);
         fusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(this);
         if(!databaseHelper.isDatabaseTableEmpty())
@@ -59,6 +104,7 @@ public class GetUserLocation extends AppCompatActivity {
                     userEntry.put("email", userDetails[0]);
                     userEntry.put("name", userDetails[2]);
                     userEntry.put("location",userLocation);
+                    userEntry.put("token",firebaseUserToken);
                     newUserRef.setValue(userEntry);
                     Toast.makeText(GetUserLocation.this, "Location "+ location.getLatitude()+location.getLongitude(), Toast.LENGTH_SHORT).show();
                     Intent intent = new Intent(GetUserLocation.this, NavBar.class);
@@ -67,5 +113,6 @@ public class GetUserLocation extends AppCompatActivity {
                 }
             }
         });
+
     }
 }

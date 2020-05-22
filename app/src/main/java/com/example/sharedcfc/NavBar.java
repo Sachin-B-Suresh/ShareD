@@ -1,8 +1,12 @@
 package com.example.sharedcfc;
 
+import android.app.NotificationChannel;
+import android.app.NotificationManager;
 import android.content.Intent;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
+import android.util.Log;
 import android.view.View;
 import android.view.Menu;
 import android.widget.ImageView;
@@ -29,6 +33,7 @@ import androidx.appcompat.widget.Toolbar;
 
 public class NavBar extends AppCompatActivity{
 
+    private static final String TAG ="MainActivity" ;
     private AppBarConfiguration mAppBarConfiguration;
 
     @Override
@@ -105,6 +110,7 @@ public class NavBar extends AppCompatActivity{
         userEmail.setText(userDetails[0]);
         if(userDetails[3]!=null)
             Glide.with(this).load(userDetails[3]).apply(RequestOptions.circleCropTransform()).into(userImage);
+
     }
 
     @Override
