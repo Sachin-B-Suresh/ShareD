@@ -191,6 +191,7 @@ public class RequestsFragment extends Fragment {
         childUpdates.put("/" + childKey + "/AccepterEmail", loggedInUserEmail);
         childUpdates.put("/" + childKey + "/AccepterName", loggedInUserName);
         childUpdates.put("/" + childKey + "/Status", "Active");
+        childUpdates.put("/" + childKey + "/AccepterMessage", loggedInUserName + " has accepted to help you!");
         requestsRef.updateChildren(childUpdates);
     }
 }

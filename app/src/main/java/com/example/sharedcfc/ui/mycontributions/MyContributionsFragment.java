@@ -185,6 +185,7 @@ public class MyContributionsFragment extends Fragment {
         childUpdates.put("/" + childKey + "/AccepterEmail", "");
         childUpdates.put("/" + childKey + "/Status", "Open");
         childUpdates.put("/" + childKey + "/AccepterName", "");
+        childUpdates.put("/" + childKey + "/AccepterMessage", loggedInUserName + " has withdrawn their help!");
         requestsRef.updateChildren(childUpdates);
     }
 }

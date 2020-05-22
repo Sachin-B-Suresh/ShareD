@@ -21,8 +21,13 @@ import android.widget.Toast;
 
 import com.example.sharedcfc.DatabaseHelper;
 import com.example.qrcodescanner.R;
+import com.example.sharedcfc.GetUserLocation;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.iid.FirebaseInstanceId;
+import com.google.firebase.iid.InstanceIdResult;
 
 import java.util.HashMap;
 
@@ -34,6 +39,7 @@ public class CallInAFavourFragment extends Fragment implements AdapterView.OnIte
     private String[] userDetails;
     private EditText editTextDescription;
     private Button submitButton;
+    private String firebaseUserToken;
     DatabaseHelper databaseHelper;
     Fragment fragment = null;
     FirebaseDatabase database = FirebaseDatabase.getInstance();
@@ -70,24 +76,39 @@ public class CallInAFavourFragment extends Fragment implements AdapterView.OnIte
             public void onClick(View v)
             {
                 // do something
-                Long tsLong = System.currentTimeMillis()/1000;
-                String ts = tsLong.toString();
-                descriptionItem=editTextDescription.getText().toString();
-                editTextDescription.setText("");
-                Log.d("Edittext",descriptionItem);
-                Log.d("Spinner item", spinnerItem);
-                HashMap<String, Object> userRequest = new HashMap<>();
-                userRequest.put("RequesterEmail", userDetails[0]);
-                userRequest.put("Requester", userDetails[2]);
-                userRequest.put("RequestedItem",spinnerItem);
-                userRequest.put("Description",descriptionItem);
-                userRequest.put("TimeStamp",tsLong);
-                userRequest.put("AccepterEmail","");
-                userRequest.put("AccepterName","");
-                userRequest.put("Status","Open");
-                userRequest.put("Action","Incomplete");
-                newRequestRef.setValue(userRequest);
-                Toast.makeText(getActivity(),"Request Submitted",Toast.LENGTH_LONG).show();
+                FirebaseInstanceId.getInstance().getInstanceId()
+                        .addOnCompleteListener(new OnCompleteListener<InstanceIdResult>() {
+                            @Override
+                            public void onComplete(@NonNull Task<InstanceIdResult> task) {
+                                if (!task.isSuccessful()) {
+                                    Log.w("TAG", "getInstanceId failed", task.getException());
+                                    return;
+                                }
+                                // Get new Instance ID token
+                                firebaseUserToken = task.getResult().getToken();
+                                Long tsLong = System.currentTimeMillis()/1000;
+                                String ts = tsLong.toString();
+                                descriptionItem=editTextDescription.getText().toString();
+                                editTextDescription.setText("");
+                                Log.d("Edittext",descriptionItem);
+                                Log.d("Spinner item", spinnerItem);
+                                HashMap<String, Object> userRequest = new HashMap<>();
+                                userRequest.put("RequesterEmail", userDetails[0]);
+                                userRequest.put("Requester", userDetails[2]);
+                                userRequest.put("RequestedItem",spinnerItem);
+                                userRequest.put("Description",descriptionItem);
+                                userRequest.put("TimeStamp",tsLong);
+                                userRequest.put("AccepterEmail","");
+                                userRequest.put("AccepterName","");
+                                userRequest.put("Status","Open");
+                                userRequest.put("Action","Incomplete");
+                                userRequest.put("token",firebaseUserToken);
+                                userRequest.put("AccepterMessage","");
+                                newRequestRef.setValue(userRequest);
+                                Toast.makeText(getActivity(),"Request Submitted",Toast.LENGTH_LONG).show();
+                            }
+                        });
+
 //                fragment = new HomeFragment();
 //                FragmentTransaction transaction = getFragmentManager().beginTransaction();
 //                transaction.replace(R.id.nav_host_fragment, fragment);
