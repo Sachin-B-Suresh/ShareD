@@ -60,9 +60,6 @@
     <string name="field_messaging_token">messaging_token</string>
 
 
-    <string name="quickstart_message">Click the SUBSCRIBE TO WEATHER button below to subscribe to the
-        weather topic. Messages sent to the weather topic will be received. The LOG TOKEN button logs the
-        InstanceID token to logcat.</string>
     <string name="subscribe_to_location_based_channel">Subscribe To LocationBasedChannel</string>
     <string name="log_token">Log Token</string>
 
