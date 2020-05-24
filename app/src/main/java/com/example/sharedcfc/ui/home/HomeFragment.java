@@ -1,11 +1,14 @@
 package com.example.sharedcfc.ui.home;
 
 
+import android.content.Intent;
+import android.location.Location;
 import android.os.Bundle;
 
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -13,7 +16,10 @@ import androidx.fragment.app.Fragment;
 
 
 import com.example.qrcodescanner.R;
+import com.example.sharedcfc.GetUserLocation;
+import com.example.sharedcfc.NavBar;
 import com.google.android.gms.location.FusedLocationProviderClient;
+import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.maps.CameraUpdate;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
@@ -21,11 +27,15 @@ import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
+
+import java.util.HashMap;
 
 public class HomeFragment extends Fragment {
     private FusedLocationProviderClient fusedLocationProviderClient;
@@ -62,12 +72,21 @@ public class HomeFragment extends Fragment {
                                 .title(name)
                                 .snippet(email));
                     }
-                    CameraUpdate update = CameraUpdateFactory.newLatLngZoom(new LatLng(latitude , longitude),14);
-                    googleMap.moveCamera(update);
                 }
 
                 @Override
                 public void onCancelled(@NonNull DatabaseError databaseError) {
+                }
+            });
+            fusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(getActivity());
+            fusedLocationProviderClient.getLastLocation().addOnCompleteListener(new OnCompleteListener<Location>() {
+                @Override
+                public void onComplete(@NonNull Task<Location> task) {
+                    if(task.isSuccessful()){
+                        Location location=task.getResult();
+                        CameraUpdate update = CameraUpdateFactory.newLatLngZoom(new LatLng(location.getLatitude() , location.getLongitude()),14);
+                        googleMap.moveCamera(update);
+                    }
                 }
             });
             googleMap.setMyLocationEnabled(true);
