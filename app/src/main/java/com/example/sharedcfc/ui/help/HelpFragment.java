@@ -1,22 +1,15 @@
 package com.example.sharedcfc.ui.help;
 
-import androidx.lifecycle.ViewModelProviders;
-
 import android.os.Bundle;
-
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
-
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-
 import com.example.qrcodescanner.R;
 
 public class HelpFragment extends Fragment {
-
-    private HelpViewModel mViewModel;
 
     public static HelpFragment newInstance() {
         return new HelpFragment();
@@ -31,7 +24,6 @@ public class HelpFragment extends Fragment {
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
-        mViewModel = ViewModelProviders.of(this).get(HelpViewModel.class);
         // TODO: Use the ViewModel
     }
 

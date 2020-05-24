@@ -2,12 +2,10 @@ package com.example.sharedcfc;
 
 import android.Manifest;
 import android.content.Intent;
-
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
-
 import android.content.pm.PackageManager;
 import android.location.Location;
 import android.os.Bundle;
@@ -17,8 +15,6 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
-
-
 import com.example.qrcodescanner.R;
 import com.google.android.gms.location.FusedLocationProviderClient;
 import com.google.android.gms.location.LocationServices;
@@ -42,30 +38,28 @@ public class SignInSignUpActivity extends AppCompatActivity {
     private AppID appId;
     private BMSClient bmsClient;
     private AppIDAuthorizationManager appIDAuthorizationManager;
-    Button btnSignIn,btnSignUp;
-    TextView txtForgotPassword;
     private FusedLocationProviderClient fusedLocationProviderClient;
     private DatabaseHelper databaseHelper;
+    private Button btnSignIn,btnSignUp;
+    private TextView txtForgotPassword;
+    private boolean doubleBackToExitPressedOnce = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_signinsignup);
-        //code written below is to get users current location
-        fusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(this);
-        if(verifyPermissions()){
-            // getLastKnownLocation();
-        }
+
+        //AppId service
         bmsClient = BMSClient.getInstance();
         appId = AppID.getInstance();
         appId.initialize(this,"d1e16955-f793-498f-a8b6-7a8193219904",AppID.REGION_UK);
-
         this.appIDAuthorizationManager = new AppIDAuthorizationManager(this.appId);
         bmsClient.setAuthorizationManager(appIDAuthorizationManager);
         btnSignIn=(Button) findViewById(R.id.ButtonSignin);
         btnSignUp=(Button) findViewById(R.id.ButtonSignup);
         txtForgotPassword=(TextView) findViewById(R.id.TextForgotPassword);
 
+        //OnClick Listeners for sign in, forgot password and sign up actions
         btnSignIn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -86,68 +80,28 @@ public class SignInSignUpActivity extends AppCompatActivity {
         });
 
     }
-    private boolean verifyPermissions(){
-        String[] permissions = {Manifest.permission.ACCESS_FINE_LOCATION,
-                Manifest.permission.READ_EXTERNAL_STORAGE,
-                Manifest.permission.WRITE_EXTERNAL_STORAGE,};
-
-        if(ContextCompat.checkSelfPermission(this.getApplicationContext(),
-                permissions[0]) == PackageManager.PERMISSION_GRANTED
-                && ContextCompat.checkSelfPermission(this.getApplicationContext(),
-                permissions[1]) == PackageManager.PERMISSION_GRANTED
-                && ContextCompat.checkSelfPermission(this.getApplicationContext(),
-                permissions[2]) == PackageManager.PERMISSION_GRANTED){
-            return  true;
-        }else{
-            ActivityCompat.requestPermissions(SignInSignUpActivity.this,
-                    permissions,
-                    REQUEST_CODE);
-            return true;
-        }
-    }
-
-    @Override
-    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
-        verifyPermissions();
-    }
-
-    //Users Current Location
-    private void getLastKnownLocation(){
-        fusedLocationProviderClient.getLastLocation().addOnCompleteListener(new OnCompleteListener<Location>() {
-            @Override
-            public void onComplete(@NonNull Task<Location> task) {
-                if(task.isSuccessful()){
-                    Location location=task.getResult();
-                    userLocation= new LatLng(location.getLatitude(),location.getLongitude());
-                    Log.d("Map latlng location",location.getLatitude() + " and " + location.getLongitude());
-                }
-            }
-        });
-    }
 
     public void signInAction(){
         databaseHelper = new DatabaseHelper(this);
         appId.initialize(this, "d1e16955-f793-498f-a8b6-7a8193219904", AppID.REGION_UK);
         this.appIDAuthorizationManager = new AppIDAuthorizationManager(this.appId);
-        //If Cloud Directory is set as default, then you need not use widgets
+
+        //AppId widget to login users
         LoginWidget loginWidget = appId.getLoginWidget();
         loginWidget.launch(this, new AuthorizationListener() {
             @Override
-            public void onAuthorizationCanceled() {
-                Log.d(" Auth","Cancelled");
-            }
+            public void onAuthorizationCanceled() { Log.d(" Auth","Cancelled"); }
 
             @Override
-            public void onAuthorizationFailure(AuthorizationException exception) {
-                Log.d(" Auth","Failed");
-            }
+            public void onAuthorizationFailure(AuthorizationException exception) { Log.d(" Auth","Failed"); }
 
             @Override
             public void onAuthorizationSuccess(AccessToken accessToken, IdentityToken identityToken, RefreshToken refreshToken) {
                 databaseHelper.deleteInstance();
                 String refresh_token;
                 refresh_token = null;
-// nullpointer exception (identityToken.getPicture is null)
+
+                // nullpointer exception (identityToken.getPicture is null)
                 try{
                     refresh_token = identityToken.getPicture();
                 } catch (Exception e) {
@@ -157,7 +111,8 @@ public class SignInSignUpActivity extends AppCompatActivity {
                         refreshToken.getRaw(),
                         identityToken.getName(),
                         refresh_token);
-                Log.d("Name",identityToken.getName());
+
+                //onAuthorizationSuccess intent user to the navigation activity
                 Intent intent = new Intent(SignInSignUpActivity.this, NavBar.class);
                 startActivity(intent);
                 finish();
@@ -172,9 +127,7 @@ public class SignInSignUpActivity extends AppCompatActivity {
         loginWidget.launchSignUp(this, new AuthorizationListener() {
 
             @Override
-            public void onAuthorizationFailure (AuthorizationException exception) {
-                Log.d(" Sign Up","Failed");
-            }
+            public void onAuthorizationFailure (AuthorizationException exception) { Log.d(" Sign Up","Failed"); }
 
             @Override
             public void onAuthorizationCanceled () {
@@ -192,6 +145,8 @@ public class SignInSignUpActivity extends AppCompatActivity {
                             refresh_token,
                             identityToken.getName(),
                             null);
+
+                    //onAuthorizationSuccess intent user to GetUserLocation activity
                     Intent intent = new Intent(SignInSignUpActivity.this, GetUserLocation.class);
                     startActivity(intent);
                     finish();
@@ -207,36 +162,25 @@ public class SignInSignUpActivity extends AppCompatActivity {
         LoginWidget loginWidget = AppID.getInstance().getLoginWidget();
         loginWidget.launchForgotPassword(this, new AuthorizationListener() {
             @Override
-            public void onAuthorizationFailure (AuthorizationException exception) {
-                //Exception occurred
-                Log.d(" Forgot Password ","Exception Occurred");
-            }
+            public void onAuthorizationFailure (AuthorizationException exception) { Log.d(" Forgot Password ","Exception Occurred"); }
 
             @Override
-            public void onAuthorizationCanceled () {
-                // Forogt password canceled by the user
-                Log.d(" Forgot Password ","Cancelled");
-            }
+            public void onAuthorizationCanceled () { Log.d(" Forgot Password ","Cancelled"); }
 
             @Override
-            public void onAuthorizationSuccess (AccessToken accessToken, IdentityToken identityToken, RefreshToken refreshToken) {
-                // Forgot password finished, in this case accessToken and identityToken will be null.
-                Log.d(" Forgot Password ","Successful");
-            }
+            public void onAuthorizationSuccess (AccessToken accessToken, IdentityToken identityToken, RefreshToken refreshToken) { Log.d(" Forgot Password ","Successful"); }
         });
     }
-    boolean doubleBackToExitPressedOnce = false;
 
+    //Press back twice to exit app
     @Override
     public void onBackPressed() {
         if (doubleBackToExitPressedOnce) {
             super.onBackPressed();
             return;
         }
-
         this.doubleBackToExitPressedOnce = true;
         Toast.makeText(this, "Please click BACK again to exit", Toast.LENGTH_SHORT).show();
-
         new Handler().postDelayed(new Runnable() {
 
             @Override

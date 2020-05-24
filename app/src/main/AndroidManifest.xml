@@ -22,9 +22,6 @@
             android:label="@string/title_activity_maps_view"
             android:theme="@style/AppTheme.NoActionBar" />
         <activity
-            android:name="com.example.sharedcfc.SplashScreen"
-            android:screenOrientation="fullSensor" />
-        <activity
             android:name="com.example.sharedcfc.SignInSignUpActivity"
             android:screenOrientation="fullSensor" />
         <activity

@@ -1,23 +1,14 @@
 package com.example.sharedcfc.ui.home;
 
-
-import android.content.Intent;
 import android.location.Location;
 import android.os.Bundle;
-
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Toast;
-
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
-
-
 import com.example.qrcodescanner.R;
-import com.example.sharedcfc.GetUserLocation;
-import com.example.sharedcfc.NavBar;
 import com.google.android.gms.location.FusedLocationProviderClient;
 import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.maps.CameraUpdate;
@@ -35,16 +26,13 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
-import java.util.HashMap;
 
 public class HomeFragment extends Fragment {
     private FusedLocationProviderClient fusedLocationProviderClient;
-    FirebaseDatabase database = FirebaseDatabase.getInstance();
-    DatabaseReference myRef = database.getReference("Users");
-    Double latitude;
-    Double longitude;
-    String name;
-    String email;
+    private FirebaseDatabase database = FirebaseDatabase.getInstance();
+    private DatabaseReference myRef = database.getReference("Users");
+    private Double latitude, longitude;
+    private String name, email;
 
     private OnMapReadyCallback callback = new OnMapReadyCallback() {
         /**
@@ -107,7 +95,6 @@ public class HomeFragment extends Fragment {
         super.onViewCreated(view, savedInstanceState);
         SupportMapFragment mapFragment = (SupportMapFragment) getChildFragmentManager().findFragmentById(R.id.map);
         if (mapFragment != null) {
-            GoogleMap googleMap;
             mapFragment.getMapAsync(callback);
         }
     }

@@ -2,9 +2,6 @@ package com.example.sharedcfc.firebase;
 
 import android.content.Context;
 import android.util.Log;
-
-import javax.xml.transform.Result;
-
 import androidx.annotation.NonNull;
 import androidx.work.Worker;
 import androidx.work.WorkerParameters;

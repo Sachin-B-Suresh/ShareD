@@ -10,14 +10,10 @@ import android.net.Uri;
 import android.os.Build;
 import androidx.core.app.NotificationCompat;
 import android.util.Log;
-
-import com.example.sharedcfc.MainActivity;
 import com.example.sharedcfc.NavBar;
-import com.example.sharedcfc.ui.myrequests.MyRequestsFragment;
 import com.google.firebase.messaging.FirebaseMessagingService;
 import com.google.firebase.messaging.RemoteMessage;
 import com.example.qrcodescanner.R;
-
 import androidx.work.OneTimeWorkRequest;
 import androidx.work.WorkManager;
 
@@ -32,6 +28,7 @@ import androidx.work.WorkManager;
  *   <action android:name="com.google.firebase.MESSAGING_EVENT" />
  * </intent-filter>
  */
+
 public class MyFirebaseMessagingService extends FirebaseMessagingService {
 
     private static final String TAG = "MyFirebaseMsgService";
@@ -114,7 +111,6 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
         notificationManager.notify(0 /* ID of notification */, notificationBuilder.build());
     }
     // [END receive_message]
-
 
     // [START on_new_token]
 

@@ -7,6 +7,7 @@ import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.util.Log;
 
+//Sqlite database used to store logged in user instance
 public class DatabaseHelper extends SQLiteOpenHelper {
     private final String LOGTAG="Scan QrCode";
     public static String DB_NAME="mydb.sqlite";
@@ -15,6 +16,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     public static String COL2="refresh_token";
     public static String COL3="name";
     public static String COL4="imageUri";
+
     public DatabaseHelper(Context context) {
         super(context, DB_NAME, null, 1);
         SQLiteDatabase db=this.getReadableDatabase();
@@ -60,19 +62,17 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         SQLiteDatabase db= this.getReadableDatabase();
         Cursor cursor = db.query(TABLE_NAME, columns, null, null, null, null, null);
         cursor.moveToLast();
-        Log.d(LOGTAG,cursor.getColumnName(0));
+//        Log.d(LOGTAG,cursor.getColumnName(0));
         String[] row = new String[4];
         row[0]=cursor.getString(cursor.getColumnIndex("email"));
         row[1]=cursor.getString(cursor.getColumnIndex("refresh_token"));
         row[2]=cursor.getString(cursor.getColumnIndex("name"));
         row[3]=cursor.getString(cursor.getColumnIndex("imageUri"));
-        Log.d("table content",row[0]+row[1]+row[2]+row[3]);
-        if(cursor.getCount()>0)
-        {
-            while (cursor.moveToNext())
-            {
+//        Log.d("table content",row[0]+row[1]+row[2]+row[3]);
+        if(cursor.getCount()>0) {
+            while (cursor.moveToNext()) {
                 String code = cursor.getString( cursor.getColumnIndex("name") );
-                Log.d(LOGTAG,"Database query result:"+code );
+//                Log.d(LOGTAG,"Database query result:"+code );
             }
         }
         return row;
@@ -87,14 +87,10 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         SQLiteDatabase db= this.getReadableDatabase();
         Cursor cursor = db.query(TABLE_NAME, columns, null, null, null, null, null);
         cursor.moveToLast();
-        Log.d(LOGTAG,cursor.getColumnName(0));
         String row;
         row=cursor.getString(cursor.getColumnIndex("email"));
-        Log.d("table content",row);
-        if(cursor.getCount()>0)
-        {
-            while (cursor.moveToNext())
-            {
+        if(cursor.getCount()>0) {
+            while (cursor.moveToNext()) {
                 String code = cursor.getString( cursor.getColumnIndex("name") );
                 Log.d(LOGTAG,"Database query result:"+code );
             }
@@ -106,16 +102,11 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         SQLiteDatabase db= this.getReadableDatabase();
         Cursor cursor = db.query(TABLE_NAME, columns, null, null, null, null, null);
         cursor.moveToLast();
-        Log.d(LOGTAG,cursor.getColumnName(0));
         String row;
         row=cursor.getString(cursor.getColumnIndex("name"));
-        Log.d("table content",row);
-        if(cursor.getCount()>0)
-        {
-            while (cursor.moveToNext())
-            {
+        if(cursor.getCount()>0) {
+            while (cursor.moveToNext()) {
                 String code = cursor.getString( cursor.getColumnIndex("name") );
-                Log.d(LOGTAG,"Database query result:"+code );
             }
         }
         return row;

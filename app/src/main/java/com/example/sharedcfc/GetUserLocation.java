@@ -2,18 +2,14 @@ package com.example.sharedcfc;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
-
 import android.content.Intent;
 import android.location.Location;
 import android.os.Bundle;
 import android.util.Log;
-import android.widget.Button;
 import android.widget.Toast;
-
 import com.example.qrcodescanner.R;
 import com.google.android.gms.location.FusedLocationProviderClient;
 import com.google.android.gms.location.LocationServices;
-import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
@@ -28,30 +24,24 @@ import java.util.HashMap;
 
 public class GetUserLocation extends AppCompatActivity {
     private static final String TAG ="GetUserLocationActivity" ;
-    String name,email,lat,lng;
-    String firebaseUserToken;
-    FirebaseDatabase database = FirebaseDatabase.getInstance();
-    DatabaseReference userRef = database.getReference("Users");
-    DatabaseReference newUserRef = userRef.push();
-    DatabaseHelper databaseHelper;
+    private String firebaseUserToken;
+    private FirebaseDatabase database = FirebaseDatabase.getInstance();
+    private DatabaseReference userRef = database.getReference("Users");
+    private DatabaseReference newUserRef = userRef.push();
+    private DatabaseHelper databaseHelper;
     private FusedLocationProviderClient fusedLocationProviderClient;
-    LatLng userLocation;
-    String[] userDetails = new String[4];
-
-
-
-    private GoogleMap mMap;
-    Button btn;
-    private final static int PLACE_PICKER_REQUEST = 999;
-    private final static int LOCATION_REQUEST_CODE = 23;
-
+    private LatLng userLocation;
+    private String[] userDetails = new String[4];
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_get_user_location);
+
+        //New Users are required to provide location details, which will be stored in firebase
         firebaseSetup();
     }
+
     public void firebaseSetup(){
         // [START subscribe_topics]
         FirebaseMessaging.getInstance().subscribeToTopic("LocationBasedChannel")
@@ -76,24 +66,24 @@ public class GetUserLocation extends AppCompatActivity {
                             Log.w(TAG, "getInstanceId failed", task.getException());
                             return;
                         }
-
                         // Get new Instance ID token
                         firebaseUserToken = task.getResult().getToken();
                         // Log and toast
                         String msg = getString(R.string.msg_token_fmt, firebaseUserToken);
-                        Log.d(TAG, msg);
-                        Toast.makeText(GetUserLocation.this, msg, Toast.LENGTH_SHORT).show();
+//                        Log.d(TAG, msg);
+//                        Toast.makeText(GetUserLocation.this, msg, Toast.LENGTH_SHORT).show();
                         getLocation();
                     }
                 });
         // [END retrieve_current_token]
     }
+
     public void getLocation(){
         databaseHelper = new DatabaseHelper(this);
         fusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(this);
-        if(!databaseHelper.isDatabaseTableEmpty())
+        if(!databaseHelper.isDatabaseTableEmpty()){
             userDetails = databaseHelper.fetchLocalInstance();
-
+        }
         fusedLocationProviderClient.getLastLocation().addOnCompleteListener(new OnCompleteListener<Location>() {
             @Override
             public void onComplete(@NonNull Task<Location> task) {
@@ -106,13 +96,13 @@ public class GetUserLocation extends AppCompatActivity {
                     userEntry.put("location",userLocation);
                     userEntry.put("token",firebaseUserToken);
                     newUserRef.setValue(userEntry);
-                    Toast.makeText(GetUserLocation.this, "Location "+ location.getLatitude()+location.getLongitude(), Toast.LENGTH_SHORT).show();
+//                    Toast.makeText(GetUserLocation.this, "Location "+ location.getLatitude()+location.getLongitude(), Toast.LENGTH_SHORT).show();
+                    //Intent user to Navigation activity
                     Intent intent = new Intent(GetUserLocation.this, NavBar.class);
                     startActivity(intent);
                     finish();
                 }
             }
         });
-
     }
 }

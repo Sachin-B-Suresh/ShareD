@@ -2,23 +2,18 @@ package com.example.sharedcfc.ui.myrequests;
 
 import androidx.appcompat.app.AlertDialog;
 import androidx.cardview.widget.CardView;
-
-
 import android.content.DialogInterface;
 import android.os.Bundle;
-
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
-
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
-
 import com.example.sharedcfc.DatabaseHelper;
 import com.example.qrcodescanner.R;
 import com.google.firebase.database.DataSnapshot;
@@ -26,17 +21,15 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
-
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
 public class MyRequestsFragment extends Fragment {
-    DatabaseHelper databaseHelper;
-    FirebaseDatabase database = FirebaseDatabase.getInstance();
-    DatabaseReference requestsRef = database.getReference("Requests");
-    String loggedInUserEmail, loggedInUserName;
-
+    private DatabaseHelper databaseHelper;
+    private FirebaseDatabase database = FirebaseDatabase.getInstance();
+    private DatabaseReference requestsRef = database.getReference("Requests");
+    private String loggedInUserEmail, loggedInUserName;
 
     public static MyRequestsFragment newInstance() {
         return new MyRequestsFragment();
@@ -51,7 +44,6 @@ public class MyRequestsFragment extends Fragment {
         View view =inflater.inflate(R.layout.fragment_requests, container, false);
         final RecyclerView recyclerView =view.findViewById(R.id.recycler_view);
         recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
-
         requestsRef.orderByChild("TimeStamp").addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
@@ -72,6 +64,7 @@ public class MyRequestsFragment extends Fragment {
                         status_array.add(snapshot.child("Status").getValue().toString());
                     }
                 }
+                //Reverse to make the firebase query in descending order
                 Collections.reverse(name_array);
                 Collections.reverse(requested_item_array);
                 Collections.reverse(description_array);
@@ -86,6 +79,7 @@ public class MyRequestsFragment extends Fragment {
         });
         return view;
     }
+
     private class RecyclerViewHolder extends RecyclerView.ViewHolder{
         private CardView cardView;
         private TextView nameTextView;
@@ -105,6 +99,7 @@ public class MyRequestsFragment extends Fragment {
             statusTextView= (TextView) itemView.findViewById(R.id.status_container);
         }
     }
+
     private  class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewHolder>{
         List<String> name_array=new ArrayList<String>();
         List<String> requested_item_array=new ArrayList<String>();
@@ -154,9 +149,10 @@ public class MyRequestsFragment extends Fragment {
         super.onActivityCreated(savedInstanceState);
         // TODO: Use the ViewModel
     }
-    public void AcceptRequest(){
 
+    public void AcceptRequest(){
     }
+
     public void cardViewOnClick(final int position, final String childKey, final String accepter, final String status){
         DialogInterface.OnClickListener dialogClickListener = new DialogInterface.OnClickListener() {
             @Override

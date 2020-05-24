@@ -2,23 +2,18 @@ package com.example.sharedcfc.ui.mycontributions;
 
 import androidx.appcompat.app.AlertDialog;
 import androidx.cardview.widget.CardView;
-
-
 import android.content.DialogInterface;
 import android.os.Bundle;
-
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
-
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
-
 import com.example.sharedcfc.DatabaseHelper;
 import com.example.qrcodescanner.R;
 import com.google.firebase.database.DataSnapshot;
@@ -26,7 +21,6 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
-
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
@@ -34,10 +28,10 @@ import java.util.List;
 import java.util.Map;
 
 public class MyContributionsFragment extends Fragment {
-    DatabaseHelper databaseHelper;
-    FirebaseDatabase database = FirebaseDatabase.getInstance();
-    DatabaseReference requestsRef = database.getReference("Requests");
-    String loggedInUserEmail, loggedInUserName;
+    private DatabaseHelper databaseHelper;
+    private FirebaseDatabase database = FirebaseDatabase.getInstance();
+    private DatabaseReference requestsRef = database.getReference("Requests");
+    private String loggedInUserEmail, loggedInUserName;
 
     public static MyContributionsFragment newInstance() {
         return new MyContributionsFragment();
@@ -52,7 +46,6 @@ public class MyContributionsFragment extends Fragment {
         View view =inflater.inflate(R.layout.fragment_requests, container, false);
         final RecyclerView recyclerView =view.findViewById(R.id.recycler_view);
         recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
-
         requestsRef.orderByChild("TimeStamp").addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
@@ -73,6 +66,7 @@ public class MyContributionsFragment extends Fragment {
                         status_array.add(snapshot.child("Status").getValue().toString());
                     }
                 }
+                //Firebase query is always in ascending order, so reverse it to make it descending
                 Collections.reverse(name_array);
                 Collections.reverse(requested_item_array);
                 Collections.reverse(description_array);
@@ -155,9 +149,10 @@ public class MyContributionsFragment extends Fragment {
         super.onActivityCreated(savedInstanceState);
         // TODO: Use the ViewModel
     }
-    public void AcceptRequest(){
 
+    public void AcceptRequest(){
     }
+
     public void cardViewOnClick(final int position, final String childKey, final String requester, final String status){
         DialogInterface.OnClickListener dialogClickListener = new DialogInterface.OnClickListener() {
             @Override
@@ -175,8 +170,8 @@ public class MyContributionsFragment extends Fragment {
             AlertDialog.Builder builder = new AlertDialog.Builder(getView().getContext());
             builder.setMessage("You have accepted to help " +requester+". Do you wish to cancel the request?").setPositiveButton("Yes",dialogClickListener)
                     .setNegativeButton("No", dialogClickListener).show();
-
     }
+
     public void updateFirebase(int position, String childKey){
         HashMap<String, Object> update_request_array = new HashMap<>();
         update_request_array.put("AccepterEmail", loggedInUserEmail);
