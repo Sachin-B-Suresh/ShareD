@@ -16,8 +16,6 @@ import com.example.qrcodescanner.R;
 
 public class SettingsFragment extends Fragment {
 
-    private SettingsViewModel mViewModel;
-
     public static SettingsFragment newInstance() {
         return new SettingsFragment();
     }
@@ -31,7 +29,6 @@ public class SettingsFragment extends Fragment {
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
-        mViewModel = ViewModelProviders.of(this).get(SettingsViewModel.class);
         // TODO: Use the ViewModel
     }
 

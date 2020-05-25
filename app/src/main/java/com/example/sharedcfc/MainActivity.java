@@ -27,9 +27,6 @@ public class MainActivity extends AppCompatActivity {
     private AppID appId;
     private BMSClient bmsClient;
     private AppIDAuthorizationManager appIDAuthorizationManager;
-    private Button btnScan;
-    private Button instruction;
-    private TextView txtLogin;
     private final String LOGTAG="Scan QrCode";
     private static final int REQUEST_CODE = 1;
     private DatabaseHelper databaseHelper;

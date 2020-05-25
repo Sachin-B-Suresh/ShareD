@@ -2,6 +2,7 @@ package com.example.sharedcfc.ui.home;
 
 import android.location.Location;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -17,6 +18,7 @@ import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
@@ -58,7 +60,8 @@ public class HomeFragment extends Fragment {
                         googleMap.addMarker(new MarkerOptions()
                                 .position(new LatLng(latitude, longitude ))
                                 .title(name)
-                                .snippet(email));
+                                .snippet(email)
+                                .draggable(true));
                     }
                 }
 
@@ -80,7 +83,6 @@ public class HomeFragment extends Fragment {
             googleMap.setMyLocationEnabled(true);
             googleMap.getUiSettings().setZoomControlsEnabled(true);
             googleMap.getUiSettings().setScrollGesturesEnabled(true);
-
         }
     };
     @Nullable

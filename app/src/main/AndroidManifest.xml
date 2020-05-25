@@ -25,7 +25,7 @@
             android:name="com.example.sharedcfc.SignInSignUpActivity"
             android:screenOrientation="fullSensor" />
         <activity
-            android:name="com.example.sharedcfc.GetUserLocation"
+            android:name="com.example.sharedcfc.PostSignUpActivity"
             android:screenOrientation="fullSensor" />
         <activity
             android:name="com.example.sharedcfc.MainActivity"

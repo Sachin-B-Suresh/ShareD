@@ -1,13 +1,9 @@
 package com.example.sharedcfc;
 
-import android.Manifest;
 import android.content.Intent;
-import androidx.annotation.NonNull;
+
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.app.ActivityCompat;
-import androidx.core.content.ContextCompat;
-import android.content.pm.PackageManager;
-import android.location.Location;
+
 import android.os.Bundle;
 import android.os.Handler;
 import android.util.Log;
@@ -17,10 +13,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 import com.example.qrcodescanner.R;
 import com.google.android.gms.location.FusedLocationProviderClient;
-import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.maps.model.LatLng;
-import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.Task;
 import com.ibm.cloud.appid.android.api.AppID;
 import com.ibm.cloud.appid.android.api.AppIDAuthorizationManager;
 import com.ibm.cloud.appid.android.api.AuthorizationException;
@@ -147,7 +140,7 @@ public class SignInSignUpActivity extends AppCompatActivity {
                             null);
 
                     //onAuthorizationSuccess intent user to GetUserLocation activity
-                    Intent intent = new Intent(SignInSignUpActivity.this, GetUserLocation.class);
+                    Intent intent = new Intent(SignInSignUpActivity.this, PostSignUpActivity.class);
                     startActivity(intent);
                     finish();
                 } else {
