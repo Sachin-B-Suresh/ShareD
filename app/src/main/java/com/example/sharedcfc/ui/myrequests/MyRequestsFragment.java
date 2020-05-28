@@ -29,6 +29,7 @@ public class MyRequestsFragment extends Fragment {
     private DatabaseHelper databaseHelper;
     private FirebaseDatabase database = FirebaseDatabase.getInstance();
     private DatabaseReference requestsRef = database.getReference("Requests");
+    private DatabaseReference requestMessageRef;
     private String loggedInUserEmail, loggedInUserName;
 
     public static MyRequestsFragment newInstance() {
@@ -44,37 +45,47 @@ public class MyRequestsFragment extends Fragment {
         View view =inflater.inflate(R.layout.fragment_requests, container, false);
         final RecyclerView recyclerView =view.findViewById(R.id.recycler_view);
         recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
-        requestsRef.orderByChild("TimeStamp").addValueEventListener(new ValueEventListener() {
+        requestsRef.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                List<String> name_array=new ArrayList<String>();
-                List<String> requested_item_array=new ArrayList<String>();
-                List<String> description_array=new ArrayList<String>();
-                List<String> requests_child_key=new ArrayList<String>();
-                List<String> accepter_array=new ArrayList<String>();
-                List<String> status_array=new ArrayList<String>();
+                final List<String> name_array=new ArrayList<String>();
+                final List<String> requested_item_array=new ArrayList<String>();
+                final List<String> description_array=new ArrayList<String>();
+                final List<String> requests_user_key=new ArrayList<String>();
+                final List<String> accepter_array=new ArrayList<String>();
+                final List<String> status_array=new ArrayList<String>();
+                final List<String> requests_message_key=new ArrayList<String>();
                 for(DataSnapshot snapshot : dataSnapshot.getChildren()){
-                    if(loggedInUserEmail.equals(snapshot.child("RequesterEmail").getValue().toString())){
-                        Log.d("firebase data",snapshot.child("Requester").getValue().toString());
-                        name_array.add(snapshot.child("Requester").getValue().toString());
-                        requested_item_array.add(snapshot.child("RequestedItem").getValue().toString());
-                        description_array.add(snapshot.child("Description").getValue().toString());
-                        requests_child_key.add(snapshot.getKey());
-                        accepter_array.add(snapshot.child("AccepterName").getValue().toString());
-                        status_array.add(snapshot.child("Status").getValue().toString());
+                    requestMessageRef = database.getReference("Requests/"+snapshot.getKey());
+                    Log.d("Hello ", requestMessageRef.toString());
+                    for(DataSnapshot msnapshot : snapshot.getChildren()){
+                        Log.d("Hello ", msnapshot.child("RequesterEmail").getValue().toString());
+                        if(loggedInUserEmail.equals(msnapshot.child("RequesterEmail").getValue().toString())){
+                            Log.d("firebase data",msnapshot.child("Requester").getValue().toString());
+                            name_array.add(msnapshot.child("Requester").getValue().toString());
+                            requested_item_array.add(msnapshot.child("RequestedItem").getValue().toString());
+                            description_array.add(msnapshot.child("Description").getValue().toString());
+                            requests_message_key.add(msnapshot.getKey());
+                            accepter_array.add(msnapshot.child("AccepterName").getValue().toString());
+                            status_array.add(msnapshot.child("Status").getValue().toString());
+                            requests_user_key.add(snapshot.getKey());
+                        }
                     }
                 }
                 //Reverse to make the firebase query in descending order
                 Collections.reverse(name_array);
                 Collections.reverse(requested_item_array);
                 Collections.reverse(description_array);
-                Collections.reverse(requests_child_key);
+                Collections.reverse(requests_user_key);
+                Collections.reverse(requests_message_key);
                 Collections.reverse(accepter_array);
                 Collections.reverse(status_array);
-                recyclerView.setAdapter(new RecyclerViewAdapter(name_array,requested_item_array,description_array,requests_child_key,accepter_array,status_array));
+                recyclerView.setAdapter(new MyRequestsFragment.RecyclerViewAdapter(name_array,requested_item_array,description_array,requests_user_key,accepter_array,status_array,requests_message_key));
             }
+
             @Override
             public void onCancelled(@NonNull DatabaseError databaseError) {
+
             }
         });
         return view;
@@ -104,17 +115,20 @@ public class MyRequestsFragment extends Fragment {
         List<String> name_array=new ArrayList<String>();
         List<String> requested_item_array=new ArrayList<String>();
         List<String> description_array=new ArrayList<String>();
-        List<String> requests_child_key=new ArrayList<String>();
+        List<String> requests_user_key=new ArrayList<String>();
         List<String> accepter_array=new ArrayList<String>();
         List<String> status_array=new ArrayList<String>();
+        List<String> requests_message_key=new ArrayList<String>();
         public RecyclerViewAdapter(List<String> name_array, List<String> requested_item_array, List<String> description_array,
-                                   List<String> requests_child_key, List<String> accepter_array, List<String> status_array) {
+                                   List<String> requests_user_key, List<String> accepter_array, List<String> status_array,
+                                   List<String> requests_message_key) {
             this.name_array=name_array;
             this.requested_item_array=requested_item_array;
             this.description_array=description_array;
-            this.requests_child_key=requests_child_key;
+            this.requests_user_key=requests_user_key;
             this.accepter_array=accepter_array;
             this.status_array=status_array;
+            this.requests_message_key=requests_message_key;
         }
 
         @NonNull
@@ -133,7 +147,7 @@ public class MyRequestsFragment extends Fragment {
             holder.cardView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    cardViewOnClick(position,requests_child_key.get(position),accepter_array.get(position),status_array.get(position));
+                    cardViewOnClick(position,requests_user_key.get(position), requests_message_key.get(position),accepter_array.get(position),status_array.get(position));
                 }
             });
         }
@@ -153,7 +167,7 @@ public class MyRequestsFragment extends Fragment {
     public void AcceptRequest(){
     }
 
-    public void cardViewOnClick(final int position, final String childKey, final String accepter, final String status){
+    public void cardViewOnClick(final int position, final String userKey,final String messageKey, final String accepter, final String status){
         DialogInterface.OnClickListener dialogClickListener = new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {

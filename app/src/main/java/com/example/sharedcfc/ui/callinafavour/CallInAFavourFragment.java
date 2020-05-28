@@ -16,13 +16,21 @@ import android.widget.Spinner;
 import android.widget.Toast;
 import com.example.sharedcfc.DatabaseHelper;
 import com.example.qrcodescanner.R;
+import com.example.sharedcfc.ui.requests.RequestsFragment;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.iid.FirebaseInstanceId;
 import com.google.firebase.iid.InstanceIdResult;
+
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
+import java.util.List;
 
 public class CallInAFavourFragment extends Fragment implements AdapterView.OnItemSelectedListener {
 
@@ -35,8 +43,10 @@ public class CallInAFavourFragment extends Fragment implements AdapterView.OnIte
     private DatabaseHelper databaseHelper;
     private Fragment fragment = null;
     private FirebaseDatabase database = FirebaseDatabase.getInstance();
-    private DatabaseReference requestsRef = database.getReference("Requests");
-    private DatabaseReference newRequestRef = requestsRef.push();
+    private DatabaseReference usersRef = database.getReference("Users");
+    private DatabaseReference requestsRef;
+    private DatabaseReference newRequestRef;
+    private String loggedInUserEmail;
 
     public static CallInAFavourFragment newInstance() {
         return new CallInAFavourFragment();
@@ -48,6 +58,8 @@ public class CallInAFavourFragment extends Fragment implements AdapterView.OnIte
         View v = inflater.inflate(R.layout.fragment_call_in_a_favour, container, false);
         databaseHelper = new DatabaseHelper(getActivity());
         userDetails = databaseHelper.fetchLocalInstance();
+        loggedInUserEmail = userDetails[0];
+        getFirebaseUserId();
         submitButton = (Button) v.findViewById(R.id.submit);
         editTextDescription = (EditText) v.findViewById(R.id.description1);
         String [] values = {"Type C Charger","MacBook 2017+ Charger","Broadband","Others"};
@@ -63,38 +75,25 @@ public class CallInAFavourFragment extends Fragment implements AdapterView.OnIte
             public void onClick(View v)
             {
                 // do something
-                FirebaseInstanceId.getInstance().getInstanceId()
-                        .addOnCompleteListener(new OnCompleteListener<InstanceIdResult>() {
-                            @Override
-                            public void onComplete(@NonNull Task<InstanceIdResult> task) {
-                                if (!task.isSuccessful()) {
-                                    Log.w("TAG", "getInstanceId failed", task.getException());
-                                    return;
-                                }
-                                // Get new Instance ID token
-                                firebaseUserToken = task.getResult().getToken();
-                                Long tsLong = System.currentTimeMillis()/1000;
-                                String ts = tsLong.toString();
-                                descriptionItem=editTextDescription.getText().toString();
-                                editTextDescription.setText("");
-                                Log.d("Edittext",descriptionItem);
-                                Log.d("Spinner item", spinnerItem);
-                                HashMap<String, Object> userRequest = new HashMap<>();
-                                userRequest.put("RequesterEmail", userDetails[0]);
-                                userRequest.put("Requester", userDetails[2]);
-                                userRequest.put("RequestedItem",spinnerItem);
-                                userRequest.put("Description",descriptionItem);
-                                userRequest.put("TimeStamp",tsLong);
-                                userRequest.put("AccepterEmail","");
-                                userRequest.put("AccepterName","");
-                                userRequest.put("Status","Open");
-                                userRequest.put("Action","Incomplete");
-                                userRequest.put("token",firebaseUserToken);
-                                userRequest.put("AccepterMessage","");
-                                newRequestRef.setValue(userRequest);
-                                Toast.makeText(getActivity(),"Request Submitted",Toast.LENGTH_LONG).show();
-                            }
-                        });
+                Long tsLong = System.currentTimeMillis()/1000;
+                String ts = tsLong.toString();
+                descriptionItem=editTextDescription.getText().toString();
+                editTextDescription.setText("");
+                Log.d("Edittext",descriptionItem);
+                Log.d("Spinner item", spinnerItem);
+                HashMap<String, Object> userRequest = new HashMap<>();
+                userRequest.put("RequesterEmail", userDetails[0]);
+                userRequest.put("Requester", userDetails[2]);
+                userRequest.put("RequestedItem",spinnerItem);
+                userRequest.put("Description",descriptionItem);
+                userRequest.put("TimeStamp",tsLong);
+                userRequest.put("AccepterEmail","");
+                userRequest.put("AccepterName","");
+                userRequest.put("Status","Open");
+                userRequest.put("Action","Incomplete");
+                userRequest.put("AccepterMessage","");
+                newRequestRef.setValue(userRequest);
+                Toast.makeText(getActivity(),"Request Submitted",Toast.LENGTH_LONG).show();
 //                fragment = new HomeFragment();
 //                FragmentTransaction transaction = getFragmentManager().beginTransaction();
 //                transaction.replace(R.id.nav_host_fragment, fragment);
@@ -117,5 +116,22 @@ public class CallInAFavourFragment extends Fragment implements AdapterView.OnIte
 
     @Override
     public void onNothingSelected(AdapterView<?> parent) {
+    }
+    public void getFirebaseUserId(){
+        Log.d("Firebase New", "inside getfirebaseuserid");
+        usersRef.orderByChild("email").equalTo(loggedInUserEmail).addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                Log.d("Firebase New", "inside getfirebaseuserid");
+                for(DataSnapshot snapshot : dataSnapshot.getChildren()){
+                    Log.d("Firebase New", snapshot.getKey());
+                    requestsRef = database.getReference("Requests/"+snapshot.getKey());
+                    newRequestRef = requestsRef.push();
+                }
+            }
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+            }
+        });
     }
 }
