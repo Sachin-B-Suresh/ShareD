@@ -10,7 +10,7 @@ exports.sendNotification = functions.database.ref('/Requests/{userId}/{requestId
 	let userToken = "";
 
 	//get the message
-	const messageToSend = requestData.AccepterMessage;
+	const messageToSend = requestData.accepterMessage;
 	console.log("status: ", messageToSend);
 
 	//get the request id. We'll be sending this in the payload
@@ -21,7 +21,7 @@ exports.sendNotification = functions.database.ref('/Requests/{userId}/{requestId
     	console.log("userId: ", userId);
 
 	//query the users node and get the name of the user who sent the message
-	const senderName = requestData.AccepterName;
+	const senderName = requestData.accepterName;
 	console.log("senderName: ", senderName);
 
 	//get the token of the user receiving the message
@@ -44,26 +44,32 @@ exports.sendNotification = functions.database.ref('/Requests/{userId}/{requestId
 
 });
 
-exports.sendNotificationToTopic = functions.database.ref('/Requests/{userId}/{requestId}').onCreate( async (snapshot, context) => {
+exports.sendNotificationToTopic = functions.database.ref('/Requests/{userId}/{requestId}').onCreate( (snapshot, context) => {
 
 	const requestData= snapshot.val();
+
+	const userId = context.params.userId;
+     console.log("userId: ", userId);
 	//get the message
-	const messageToSend = requestData.Description;
+	const messageToSend = requestData.description;
 	console.log("status: ", messageToSend);
 
-	const senderName = requestData.Requester;
+	const senderName = requestData.requester;
 	console.log("senderName: ", senderName);
 
-	//we have everything we need
-	//Build the message payload and send the message
-	console.log("Construction the notification message.");
-	var message = {
-        notification:{
-            title:"New Request from "+ senderName,
-            body: messageToSend
-        },
-        topic:"LocationBasedChannel"
-	}
-	let responce = await admin.messaging().send(message);
-	console.log(responce);
+	return admin.database().ref("/Users/" + userId).once('value').then(snap => {
+    	    userTopic = snap.child("topic").val();
+    	    console.log("topic: ", userTopic);
+    	    	//we have everything we need
+            	//Build the message payload and send the message
+            	console.log("Construction the notification message.");
+            	var message = {
+                    notification:{
+                        title:"New Request from " + senderName,
+                        body: messageToSend
+                    },
+                    topic:userTopic
+            	}
+            	return  admin.messaging().send(message);
+    	    });
 });

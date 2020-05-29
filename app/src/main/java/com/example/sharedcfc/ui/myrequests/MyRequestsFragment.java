@@ -59,15 +59,15 @@ public class MyRequestsFragment extends Fragment {
                     requestMessageRef = database.getReference("Requests/"+snapshot.getKey());
                     Log.d("Hello ", requestMessageRef.toString());
                     for(DataSnapshot msnapshot : snapshot.getChildren()){
-                        Log.d("Hello ", msnapshot.child("RequesterEmail").getValue().toString());
-                        if(loggedInUserEmail.equals(msnapshot.child("RequesterEmail").getValue().toString())){
-                            Log.d("firebase data",msnapshot.child("Requester").getValue().toString());
-                            name_array.add(msnapshot.child("Requester").getValue().toString());
-                            requested_item_array.add(msnapshot.child("RequestedItem").getValue().toString());
-                            description_array.add(msnapshot.child("Description").getValue().toString());
+                        Log.d("Hello ", msnapshot.child("requesterEmail").getValue().toString());
+                        if(loggedInUserEmail.equals(msnapshot.child("requesterEmail").getValue().toString())){
+                            Log.d("firebase data",msnapshot.child("requester").getValue().toString());
+                            name_array.add(msnapshot.child("requester").getValue().toString());
+                            requested_item_array.add(msnapshot.child("requestedItem").getValue().toString());
+                            description_array.add(msnapshot.child("description").getValue().toString());
                             requests_message_key.add(msnapshot.getKey());
-                            accepter_array.add(msnapshot.child("AccepterName").getValue().toString());
-                            status_array.add(msnapshot.child("Status").getValue().toString());
+                            accepter_array.add(msnapshot.child("accepterName").getValue().toString());
+                            status_array.add(msnapshot.child("status").getValue().toString());
                             requests_user_key.add(snapshot.getKey());
                         }
                     }

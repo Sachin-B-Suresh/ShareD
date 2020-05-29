@@ -61,15 +61,15 @@ public class MyContributionsFragment extends Fragment {
                     requestMessageRef = database.getReference("Requests/"+snapshot.getKey());
                     Log.d("Hello ", requestMessageRef.toString());
                     for(DataSnapshot msnapshot : snapshot.getChildren()){
-                        Log.d("Hello ", msnapshot.child("RequesterEmail").getValue().toString());
-                        if(loggedInUserEmail.equals(msnapshot.child("AccepterEmail").getValue().toString())){
-                            Log.d("firebase data",msnapshot.child("Requester").getValue().toString());
-                            name_array.add(msnapshot.child("Requester").getValue().toString());
-                            requested_item_array.add(msnapshot.child("RequestedItem").getValue().toString());
-                            description_array.add(msnapshot.child("Description").getValue().toString());
+                        Log.d("Hello ", msnapshot.child("requesterEmail").getValue().toString());
+                        if(loggedInUserEmail.equals(msnapshot.child("accepterEmail").getValue().toString())){
+                            Log.d("firebase data",msnapshot.child("requester").getValue().toString());
+                            name_array.add(msnapshot.child("requester").getValue().toString());
+                            requested_item_array.add(msnapshot.child("requestedItem").getValue().toString());
+                            description_array.add(msnapshot.child("description").getValue().toString());
                             requests_message_key.add(msnapshot.getKey());
-                            accepter_array.add(msnapshot.child("AccepterName").getValue().toString());
-                            status_array.add(msnapshot.child("Status").getValue().toString());
+                            accepter_array.add(msnapshot.child("accepterName").getValue().toString());
+                            status_array.add(msnapshot.child("status").getValue().toString());
                             requests_user_key.add(snapshot.getKey());
                         }
                     }
@@ -188,13 +188,13 @@ public class MyContributionsFragment extends Fragment {
 
     public void updateFirebase(int position, String userKey,String messageKey){
         HashMap<String, Object> update_request_array = new HashMap<>();
-        update_request_array.put("AccepterEmail", loggedInUserEmail);
-        update_request_array.put("Status", "Active");
+        update_request_array.put("accepterEmail", loggedInUserEmail);
+        update_request_array.put("status", "Active");
         Map<String, Object> childUpdates = new HashMap<>();
-        childUpdates.put("/" + userKey + "/" + messageKey + "/AccepterEmail", "");
-        childUpdates.put("/" + userKey + "/" + messageKey + "/Status", "Open");
-        childUpdates.put("/" + userKey + "/" + messageKey + "/AccepterName", "");
-        childUpdates.put("/" + userKey + "/" + messageKey + "/AccepterMessage", loggedInUserName + " has withdrawn their help!");
+        childUpdates.put("/" + userKey + "/" + messageKey + "/accepterEmail", "");
+        childUpdates.put("/" + userKey + "/" + messageKey + "/status", "Open");
+        childUpdates.put("/" + userKey + "/" + messageKey + "/accepterName", "");
+        childUpdates.put("/" + userKey + "/" + messageKey + "/accepterMessage", loggedInUserName + " has withdrawn their help!");
         requestsRef.updateChildren(childUpdates);
     }
 }

@@ -2,7 +2,6 @@ package com.example.sharedcfc;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
-
 import android.app.NotificationChannel;
 import android.app.NotificationManager;
 import android.content.Intent;
@@ -191,7 +190,7 @@ public class PostSignUpActivity extends AppCompatActivity implements OnMapReadyC
         userEntry.put("name", userDetails[2]);
         userEntry.put("location",userLocation);
         userEntry.put("token",firebaseUserToken);
-        userEntry.put("Channel",initialChannel);
+        userEntry.put("topic",initialChannel);
         newUserRef.setValue(userEntry);
         //Intent user to Navigation activity
         Intent intent = new Intent(PostSignUpActivity.this, NavBar.class);
