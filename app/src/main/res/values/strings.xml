@@ -60,10 +60,8 @@
     <string name="field_messaging_token">messaging_token</string>
 
 
-    <string name="subscribe_to_location_based_channel">Subscribe To LocationBasedChannel</string>
     <string name="log_token">Log Token</string>
 
-    <string name="msg_subscribed">Subscribed to LocationBased topic</string>
     <string name="msg_token_fmt" translatable="false">InstanceID Token: %s</string>
 
     <string name="default_notification_channel_id" translatable="false">fcm_default_channel</string>

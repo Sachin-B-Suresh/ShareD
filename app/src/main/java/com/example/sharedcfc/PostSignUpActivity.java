@@ -3,8 +3,11 @@ package com.example.sharedcfc;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.app.NotificationChannel;
+import android.app.NotificationManager;
 import android.content.Intent;
 import android.location.Location;
+import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -112,27 +115,43 @@ public class PostSignUpActivity extends AppCompatActivity implements OnMapReadyC
 
     public void submitAction(){
         //Get Subscription Channel
-        String channel = editTextLocality.getText().toString().toLowerCase();
-        if(channel.isEmpty()){
+        String channelName = editTextLocality.getText().toString().toLowerCase();
+        if(channelName.isEmpty()){
             editTextLocality.setError("Please enter locality");
         }
 //            Toast.makeText(GetUserLocation.this, "Please enter locality!", Toast.LENGTH_SHORT).show();
         else{
-            channel= channel.replaceAll("\\s+","_");
-            Log.d("User Input", channel);
+            channelName= channelName.replaceAll("\\s+","_");
+            Log.d("User Input", channelName);
             //Subscribe to  a channel
-            firebaseSetup(channel);
+            firebaseSetup(channelName);
         }
     }
 
-    public void firebaseSetup(final String initialChannel){
-        final String myChannel=initialChannel;
+    public void firebaseSetup(final String initialChannelName){
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            // Create channel to show notifications.
+            String channelId  = "fcm_"+initialChannelName;
+            String channelName = initialChannelName;
+            NotificationManager notificationManager =
+                    getSystemService(NotificationManager.class);
+            notificationManager.createNotificationChannel(new NotificationChannel(channelId,
+                    channelName, NotificationManager.IMPORTANCE_HIGH));
+        }
+        // If a notification message is tapped, any data accompanying the notification
+        // message is available in the intent extras. In this sample the launcher
+        // intent is fired when the notification is tapped, so any accompanying data would
+        // be handled here. If you want a different intent fired, set the click_action
+        // field of the notification message to the desired intent. The launcher intent
+        // is used when no click_action is specified.
+        //
+        // Handle possible data accompanying notification message.
         // [START subscribe_topics]
-        FirebaseMessaging.getInstance().subscribeToTopic(initialChannel)
+        FirebaseMessaging.getInstance().subscribeToTopic(initialChannelName)
                 .addOnCompleteListener(new OnCompleteListener<Void>() {
                     @Override
                     public void onComplete(@NonNull Task<Void> task) {
-                        String msg = "Subscribed to " + myChannel;
+                        String msg = "Subscribed to " + initialChannelName;
                         if (!task.isSuccessful()) {
                             msg = getString(R.string.msg_subscribe_failed);
                         }
@@ -156,7 +175,7 @@ public class PostSignUpActivity extends AppCompatActivity implements OnMapReadyC
                         String msg = getString(R.string.msg_token_fmt, firebaseUserToken);
 //                        Log.d(TAG, msg);
 //                        Toast.makeText(GetUserLocation.this, msg, Toast.LENGTH_SHORT).show();
-                        writeToFirebase(initialChannel);
+                        writeToFirebase(initialChannelName);
                     }
                 });
         // [END retrieve_current_token]

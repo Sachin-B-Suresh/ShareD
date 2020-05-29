@@ -40,6 +40,7 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+
         //AppId service
         bmsClient = BMSClient.getInstance();
         appId = AppID.getInstance();
@@ -52,8 +53,7 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void run() {
 
-                //Verify for permissions during runtime
-                verifyPermissions();
+
 
                 //Search for local instance of logged in user to get refresh token
                 if(databaseHelper.isDatabaseTableEmpty()){
@@ -97,28 +97,6 @@ public class MainActivity extends AppCompatActivity {
             }},SLPASH_TIME_OUT);
 
     }
-    private void verifyPermissions(){
-        Log.d(TAG, "verifyPermissions: asking user for permissions");
-        String[] permissions = {Manifest.permission.READ_EXTERNAL_STORAGE,
-                Manifest.permission.WRITE_EXTERNAL_STORAGE,
-                Manifest.permission.ACCESS_FINE_LOCATION};
 
-        if(ContextCompat.checkSelfPermission(this.getApplicationContext(),
-                permissions[0]) == PackageManager.PERMISSION_GRANTED
-                && ContextCompat.checkSelfPermission(this.getApplicationContext(),
-                permissions[1]) == PackageManager.PERMISSION_GRANTED
-                && ContextCompat.checkSelfPermission(this.getApplicationContext(),
-                permissions[2]) == PackageManager.PERMISSION_GRANTED){
-        }else{
-            ActivityCompat.requestPermissions(MainActivity.this,
-                    permissions,
-                    REQUEST_CODE);
-        }
-    }
-
-    @Override
-    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
-        verifyPermissions();
-    }
 
 }
