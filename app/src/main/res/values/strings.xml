@@ -35,8 +35,6 @@
     <string name="menu_home_second">Home Second</string>
 
 
-
-
     <!-- FCM Related Strings -->
     <string name="data_type">data_type</string>
     <string name="direct_message">direct_message</string>

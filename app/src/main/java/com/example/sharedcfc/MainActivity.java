@@ -1,15 +1,19 @@
 package com.example.sharedcfc;
 
 import android.Manifest;
+import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import androidx.annotation.NonNull;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 import androidx.appcompat.app.AppCompatActivity;
+
+import android.net.ConnectivityManager;
 import android.os.Bundle;
 import android.os.Handler;
 import android.util.Log;
+import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -32,71 +36,100 @@ public class MainActivity extends AppCompatActivity {
     private DatabaseHelper databaseHelper;
     private static final int REQUEST_CODE_QR_SCAN = 101;
     private static final String TAG = "SearchActivity";
-    private static int SLPASH_TIME_OUT=2000;
+    private Button btnRetry;
+    private boolean doubleBackToExitPressedOnce = false;
+
 
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-
-
-        //AppId service
-        bmsClient = BMSClient.getInstance();
-        appId = AppID.getInstance();
-        appId.initialize(this, "d1e16955-f793-498f-a8b6-7a8193219904", AppID.REGION_UK);
-
-        //Local sqlite database helper
-        databaseHelper = new DatabaseHelper(this);
-
-        new Handler().postDelayed(new Runnable() {
+        btnRetry = (Button) findViewById(R.id.RetryButton);
+        btnRetry.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void run() {
+            public void onClick(View v) {
+                retryAction();
+            }
+        });
 
+        if(isNetworkConnected()){
+            //AppId service
+            bmsClient = BMSClient.getInstance();
+            appId = AppID.getInstance();
+            appId.initialize(this, "d1e16955-f793-498f-a8b6-7a8193219904", AppID.REGION_UK);
 
+            //Local sqlite database helper
+            databaseHelper = new DatabaseHelper(this);
 
-                //Search for local instance of logged in user to get refresh token
-                if(databaseHelper.isDatabaseTableEmpty()){
-                    Toast.makeText(MainActivity.this, "No Local Instance, Please Login", Toast.LENGTH_SHORT).show();
-                    Intent intent = new Intent(MainActivity.this, SignInSignUpActivity.class);
-                    startActivity(intent);
-                    finish();
-                }
-                else {
-                    Toast.makeText(MainActivity.this, "Local Instance Found", Toast.LENGTH_SHORT).show();
-                    String[] userInstance=databaseHelper.fetchLocalInstance();
-                    String refreshTokenString= userInstance[1];
+            //Search for local instance of logged in user to get refresh token
+            if(databaseHelper.isDatabaseTableEmpty()){
+                Toast.makeText(MainActivity.this, "No Local Instance, Please Login", Toast.LENGTH_SHORT).show();
+                Intent intent = new Intent(MainActivity.this, SignInSignUpActivity.class);
+                startActivity(intent);
+                finish();
+            }
+            else {
+                Toast.makeText(MainActivity.this, "Local Instance Found", Toast.LENGTH_SHORT).show();
+                String[] userInstance=databaseHelper.fetchLocalInstance();
+                String refreshTokenString= userInstance[1];
 
-                    //Use the refresh token to sign in the user
-                    AppID.getInstance().signinWithRefreshToken(getApplicationContext(), refreshTokenString, new AuthorizationListener() {
-                        @Override
-                        public void onAuthorizationFailure(AuthorizationException exception) {
-                            databaseHelper.deleteInstance();
-                            Intent intent = new Intent(MainActivity.this, SignInSignUpActivity.class);
-                            startActivity(intent);
-                            finish();
-                        }
+                //Use the refresh token to sign in the user
+                AppID.getInstance().signinWithRefreshToken(getApplicationContext(), refreshTokenString, new AuthorizationListener() {
+                    @Override
+                    public void onAuthorizationFailure(AuthorizationException exception) {
+                        databaseHelper.deleteInstance();
+                        Intent intent = new Intent(MainActivity.this, SignInSignUpActivity.class);
+                        startActivity(intent);
+                        finish();
+                    }
 
-                        @Override
-                        public void onAuthorizationCanceled() {
-                            databaseHelper.deleteInstance();
-                            Intent intent = new Intent(MainActivity.this, SignInSignUpActivity.class);
-                            startActivity(intent);
-                            finish();
-                        }
+                    @Override
+                    public void onAuthorizationCanceled() {
+                        databaseHelper.deleteInstance();
+                        Intent intent = new Intent(MainActivity.this, SignInSignUpActivity.class);
+                        startActivity(intent);
+                        finish();
+                    }
 
-                        @Override
-                        public void onAuthorizationSuccess(AccessToken accessToken, IdentityToken identityToken, RefreshToken refreshToken) {
-                            Intent intent = new Intent(MainActivity.this, NavBar.class);
-                            startActivity(intent);
-                            finish();
-                        }
-                    });
-                }
-
-            }},SLPASH_TIME_OUT);
-
+                    @Override
+                    public void onAuthorizationSuccess(AccessToken accessToken, IdentityToken identityToken, RefreshToken refreshToken) {
+                        Intent intent = new Intent(MainActivity.this, NavBar.class);
+                        startActivity(intent);
+                        finish();
+                    }
+                });
+            }
+        }
+        else {
+            Toast.makeText(MainActivity.this, "No Internet Connection", Toast.LENGTH_SHORT).show();
+        }
     }
 
+    private void retryAction() {
+        finish();
+        startActivity(getIntent());
+    }
 
+    private boolean isNetworkConnected() {
+        ConnectivityManager cm = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
+        return cm.getActiveNetworkInfo() != null && cm.getActiveNetworkInfo().isConnected();
+    }
+    //Press back twice to exit app
+    @Override
+    public void onBackPressed() {
+        if (doubleBackToExitPressedOnce) {
+            super.onBackPressed();
+            return;
+        }
+        this.doubleBackToExitPressedOnce = true;
+        Toast.makeText(this, "Please click BACK again to exit", Toast.LENGTH_SHORT).show();
+        new Handler().postDelayed(new Runnable() {
+
+            @Override
+            public void run() {
+                doubleBackToExitPressedOnce=false;
+            }
+        }, 2000);
+    }
 }
