@@ -13,7 +13,7 @@ import android.util.Log;
 import com.example.sharedcfc.NavBar;
 import com.google.firebase.messaging.FirebaseMessagingService;
 import com.google.firebase.messaging.RemoteMessage;
-import com.example.qrcodescanner.R;
+import com.example.sharedcfc.R;
 import androidx.work.OneTimeWorkRequest;
 import androidx.work.WorkManager;
 

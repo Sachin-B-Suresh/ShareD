@@ -1,4 +1,4 @@
-package com.example.qrcodescanner;
+package com.example.sharedcfc;
 
 import android.content.Context;
 import androidx.test.platform.app.InstrumentationRegistry;

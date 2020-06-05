@@ -45,5 +45,6 @@ dependencies {
     implementation "androidx.recyclerview:recyclerview:1.2.0-alpha03"
     implementation "androidx.cardview:cardview:1.0.0"
     implementation "androidx.work:work-gcm:2.4.0-beta01";
+    implementation "androidx.preference:preference:1.1.1"
 
 }

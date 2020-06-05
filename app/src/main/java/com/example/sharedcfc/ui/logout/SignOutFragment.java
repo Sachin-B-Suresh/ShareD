@@ -8,7 +8,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import com.example.qrcodescanner.R;
+import com.example.sharedcfc.R;
 
 public class SignOutFragment extends Fragment {
 
