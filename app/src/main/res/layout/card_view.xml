@@ -13,6 +13,7 @@
     android:foreground="?attr/selectableItemBackgroundBorderless">
     >
     <LinearLayout
+        android:id="@+id/parent_linear_layout"
         android:background="@drawable/bg1"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
@@ -85,6 +86,5 @@
 
 
         </LinearLayout>
-
     </LinearLayout>
 </androidx.cardview.widget.CardView>

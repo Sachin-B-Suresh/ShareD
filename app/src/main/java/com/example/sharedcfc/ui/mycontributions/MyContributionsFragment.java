@@ -3,6 +3,7 @@ package com.example.sharedcfc.ui.mycontributions;
 import androidx.appcompat.app.AlertDialog;
 import androidx.cardview.widget.CardView;
 import android.content.DialogInterface;
+import android.graphics.Color;
 import android.os.Bundle;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -13,6 +14,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 import com.example.sharedcfc.DatabaseHelper;
 import com.example.sharedcfc.R;
@@ -98,6 +100,7 @@ public class MyContributionsFragment extends Fragment {
         private TextView emailTextView;
         private TextView descriptionTextView;
         private TextView statusTextView;
+        private LinearLayout linearLayout;
 
         public RecyclerViewHolder(@NonNull View itemView) {
             super(itemView);
@@ -109,6 +112,7 @@ public class MyContributionsFragment extends Fragment {
             emailTextView = (TextView) itemView.findViewById(R.id.email_holder);
             descriptionTextView = (TextView) itemView.findViewById(R.id.description_holder);
             statusTextView= (TextView) itemView.findViewById(R.id.status_container);
+            linearLayout = itemView.findViewById(R.id.parent_linear_layout);
         }
     }
     private  class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewHolder>{
@@ -140,6 +144,9 @@ public class MyContributionsFragment extends Fragment {
 
         @Override
         public void onBindViewHolder(@NonNull RecyclerViewHolder holder, final int position) {
+            if(status_array.get(position).equals("Closed")){
+                holder.linearLayout.setBackgroundColor(Color.parseColor("#949494"));
+            }
             holder.nameTextView.setText(name_array.get(position));
             holder.emailTextView.setText("Item: " + requested_item_array.get(position));
             holder.descriptionTextView.setText("Description: " + description_array.get(position));
@@ -181,9 +188,16 @@ public class MyContributionsFragment extends Fragment {
                 }
             }
         };
+        if(status.equals("Closed")){
+            AlertDialog.Builder builder = new AlertDialog.Builder(getView().getContext());
+            builder.setMessage("This request has  been closed!").setNegativeButton("Ok", dialogClickListener).show();
+        }
+        else{
             AlertDialog.Builder builder = new AlertDialog.Builder(getView().getContext());
             builder.setMessage("You have accepted to help " +requester+". Do you wish to cancel the request?").setPositiveButton("Yes",dialogClickListener)
                     .setNegativeButton("No", dialogClickListener).show();
+        }
+
     }
 
     public void updateFirebase(int position, String userKey,String messageKey){

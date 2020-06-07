@@ -3,6 +3,7 @@ package com.example.sharedcfc.ui.myrequests;
 import androidx.appcompat.app.AlertDialog;
 import androidx.cardview.widget.CardView;
 import android.content.DialogInterface;
+import android.graphics.Color;
 import android.os.Bundle;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -13,6 +14,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 import com.example.sharedcfc.DatabaseHelper;
 import com.example.sharedcfc.R;
@@ -23,7 +25,9 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public class MyRequestsFragment extends Fragment {
     private DatabaseHelper databaseHelper;
@@ -97,6 +101,7 @@ public class MyRequestsFragment extends Fragment {
         private TextView emailTextView;
         private TextView descriptionTextView;
         private TextView statusTextView;
+        private LinearLayout linearLayout;
 
         public RecyclerViewHolder(@NonNull View itemView) {
             super(itemView);
@@ -108,6 +113,7 @@ public class MyRequestsFragment extends Fragment {
             emailTextView = (TextView) itemView.findViewById(R.id.email_holder);
             descriptionTextView = (TextView) itemView.findViewById(R.id.description_holder);
             statusTextView= (TextView) itemView.findViewById(R.id.status_container);
+            linearLayout = itemView.findViewById(R.id.parent_linear_layout);
         }
     }
 
@@ -140,6 +146,9 @@ public class MyRequestsFragment extends Fragment {
 
         @Override
         public void onBindViewHolder(@NonNull RecyclerViewHolder holder, final int position) {
+            if(status_array.get(position).equals("Closed")){
+                holder.linearLayout.setBackgroundColor(Color.parseColor("#949494"));
+            }
             holder.nameTextView.setText(name_array.get(position));
             holder.emailTextView.setText("Item: " + requested_item_array.get(position));
             holder.descriptionTextView.setText("Description: " + description_array.get(position));
@@ -173,11 +182,14 @@ public class MyRequestsFragment extends Fragment {
             public void onClick(DialogInterface dialog, int which) {
                 switch (which){
                     case DialogInterface.BUTTON_POSITIVE:
-                        //updateFirebase(position, childKey);
+                        updateFirebase(userKey, messageKey);
                         break;
                     case DialogInterface.BUTTON_NEGATIVE:
                         //No button clicked
                         break;
+                        case DialogInterface.BUTTON_NEUTRAL:
+                            deleteFirebase(userKey, messageKey);
+                            break;
                 }
             }
         };
@@ -185,19 +197,27 @@ public class MyRequestsFragment extends Fragment {
             AlertDialog.Builder builder = new AlertDialog.Builder(getView().getContext());
             builder.setMessage(accepter + " has accepted to help!").setNegativeButton("Ok", dialogClickListener).show();
         }
+        else if(status.equals("Closed")){
+            AlertDialog.Builder builder = new AlertDialog.Builder(getView().getContext());
+            builder.setMessage("This request has been closed, Remove from list?").setNegativeButton("Back", dialogClickListener).setNeutralButton("Remove", dialogClickListener).show();
+
+        }
         else{
             AlertDialog.Builder builder = new AlertDialog.Builder(getView().getContext());
-            builder.setMessage("Request is still open!").setNegativeButton("Ok", dialogClickListener).show();
+            builder.setMessage("Request is still open! Do you wish to delete this request?").setNegativeButton("Back", dialogClickListener).setPositiveButton("Delete", dialogClickListener).show();
 
         }
     }
-//    public void updateFirebase(int position, String childKey){
-//        HashMap<String, Object> update_request_array = new HashMap<>();
-//        update_request_array.put("AccepterEmail", loggedInUserEmail);
-//        update_request_array.put("Status", "Active");
-//        Map<String, Object> childUpdates = new HashMap<>();
-//        childUpdates.put("/" + childKey + "/AccepterEmail", loggedInUserEmail);
-//        childUpdates.put("/" + childKey + "/Status", "Active");
-//        requestsRef.updateChildren(childUpdates);
-//    }
+    public void updateFirebase(String userKey, String messageKey){
+        Map<String, Object> childUpdates = new HashMap<>();
+        childUpdates.put("/" + userKey + "/" + messageKey + "/status", "Closed");
+        childUpdates.put("/" + userKey + "/" + messageKey + "/action", "Deleted");
+        requestsRef.updateChildren(childUpdates);
+    }
+
+    public void deleteFirebase(String userKey, String messageKey){
+        Map<String, Object> childUpdates = new HashMap<>();
+        childUpdates.put("/" + userKey + "/" + messageKey , null);
+        requestsRef.updateChildren(childUpdates);
+    }
 }
