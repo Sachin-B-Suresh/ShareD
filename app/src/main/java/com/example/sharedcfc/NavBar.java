@@ -72,7 +72,7 @@ public class NavBar extends AppCompatActivity{
                                         //Yes button clicked
                                         Toast.makeText(NavBar.this,"Signed Out",Toast.LENGTH_SHORT).show();
                                         databaseHelper.deleteInstance();
-                                        Intent intent = new Intent(NavBar.this, SignInSignUpActivity.class);
+                                        Intent intent = new Intent(NavBar.this, SplashScreen.class);
                                         startActivity(intent);
                                         finish();
 //                                        break;

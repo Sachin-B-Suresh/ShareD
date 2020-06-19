@@ -48,6 +48,7 @@ public class MainActivity extends AppCompatActivity {
         });
 
         if(isNetworkConnected()){
+            btnRetry.setVisibility(View.GONE);
             //AppId service
             bmsClient = BMSClient.getInstance();
             appId = AppID.getInstance();

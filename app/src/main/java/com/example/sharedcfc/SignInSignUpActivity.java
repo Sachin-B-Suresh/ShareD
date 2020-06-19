@@ -1,6 +1,7 @@
 package com.example.sharedcfc;
 
 import android.Manifest;
+import android.app.ProgressDialog;
 import android.content.Intent;
 
 import androidx.annotation.NonNull;
@@ -42,13 +43,14 @@ public class SignInSignUpActivity extends AppCompatActivity {
     private Button btnSignIn,btnSignUp;
     private TextView txtForgotPassword;
     private boolean doubleBackToExitPressedOnce = false;
-
+    private ProgressDialog progress ;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_signinsignup);
         //Verify for permissions during runtime
         verifyPermissions();
+        progress = new ProgressDialog(this);
 
         //AppId service
         bmsClient = BMSClient.getInstance();
@@ -83,6 +85,10 @@ public class SignInSignUpActivity extends AppCompatActivity {
     }
 
     public void signInAction(){
+        progress.setTitle("Loading");
+        progress.setMessage("Wait while loading...");
+        progress.setCancelable(false); // disable dismiss by tapping outside of the dialog
+        progress.show();
         databaseHelper = new DatabaseHelper(this);
         appId.initialize(this, "d1e16955-f793-498f-a8b6-7a8193219904", AppID.REGION_UK);
         this.appIDAuthorizationManager = new AppIDAuthorizationManager(this.appId);
@@ -91,10 +97,16 @@ public class SignInSignUpActivity extends AppCompatActivity {
         LoginWidget loginWidget = appId.getLoginWidget();
         loginWidget.launch(this, new AuthorizationListener() {
             @Override
-            public void onAuthorizationCanceled() { Log.d(" Auth","Cancelled"); }
+            public void onAuthorizationCanceled() {
+                Log.d(" Auth","Cancelled");
+                progress.dismiss();
+            }
 
             @Override
-            public void onAuthorizationFailure(AuthorizationException exception) { Log.d(" Auth","Failed"); }
+            public void onAuthorizationFailure(AuthorizationException exception) {
+                Log.d(" Auth","Failed");
+                progress.dismiss();
+            }
 
             @Override
             public void onAuthorizationSuccess(AccessToken accessToken, IdentityToken identityToken, RefreshToken refreshToken) {
@@ -115,12 +127,17 @@ public class SignInSignUpActivity extends AppCompatActivity {
 
                 //onAuthorizationSuccess intent user to the navigation activity
                 Intent intent = new Intent(SignInSignUpActivity.this, NavBar.class);
+                progress.dismiss();
                 startActivity(intent);
                 finish();
             }
         });
     }
     public void signUpAction(){
+        progress.setTitle("Loading");
+        progress.setMessage("Wait while loading...");
+        progress.setCancelable(false); // disable dismiss by tapping outside of the dialog
+        progress.show();
         databaseHelper = new DatabaseHelper(this);
         appId.initialize(this, "d1e16955-f793-498f-a8b6-7a8193219904", AppID.REGION_UK);
         this.appIDAuthorizationManager = new AppIDAuthorizationManager(this.appId);
@@ -128,11 +145,15 @@ public class SignInSignUpActivity extends AppCompatActivity {
         loginWidget.launchSignUp(this, new AuthorizationListener() {
 
             @Override
-            public void onAuthorizationFailure (AuthorizationException exception) { Log.d(" Sign Up","Failed"); }
+            public void onAuthorizationFailure (AuthorizationException exception) {
+                Log.d(" Sign Up","Failed");
+                progress.dismiss();
+            }
 
             @Override
             public void onAuthorizationCanceled () {
                 Log.d(" Sign Up","Cancelled");
+                progress.dismiss();
             }
 
             @Override
@@ -149,9 +170,11 @@ public class SignInSignUpActivity extends AppCompatActivity {
 
                     //onAuthorizationSuccess intent user to GetUserLocation activity
                     Intent intent = new Intent(SignInSignUpActivity.this, PostSignUpActivity.class);
+                    progress.dismiss();
                     startActivity(intent);
                     finish();
                 } else {
+                    progress.dismiss();
                     Toast.makeText(SignInSignUpActivity.this, "Email Verification Required", Toast.LENGTH_SHORT).show();
                 }
             }
