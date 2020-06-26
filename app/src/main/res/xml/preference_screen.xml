@@ -5,15 +5,15 @@
         android:title="Notification"
         android:icon="@drawable/ic_notifications_black_24dp">
     </PreferenceCategory>
-    <SwitchPreference
-        android:defaultValue="false"
-        android:key="switch_preference_1"
+    <Preference
+        android:key="updateNotifications"
         android:title="Allow Notifications"
         android:summary="Turn notifications On or Off"/>
     <PreferenceCategory
         android:title="Location"
         android:icon="@drawable/ic_location_on_black_24dp">
         <Preference
+            android:key="updateLocation"
             android:title="Update Location"
             android:selectable="true"/>
     </PreferenceCategory>
